@@ -39,7 +39,7 @@ Goal: see a procedurally generated planet on screen.
 - [x] Seeded terrain generation (noise → altitude); continents/oceans; tests for determinism.
 - [x] Surface classification (ocean/coast/land/mountain/ice) from altitude + sea level.
 - [x] Canvas tile renderer: altitude/surface map mode; pan/zoom; longitude-wrap rendering.
-- [ ] Render loop decoupled from sim tick; reads state read-only.
+- [x] Render loop decoupled from sim tick; reads state read-only.
 - [ ] Pixel-art tile palette for surface types.
 
 ## M3 — Atmosphere & climate (the core loop)

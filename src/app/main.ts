@@ -7,6 +7,8 @@ import { classifySurface } from '@sim/geosphere/surface';
 import { PlanetRenderer } from '@render/planetRenderer';
 import { surfaceMapMode } from '@render/mapModes';
 import { createCamera } from '@render/camera';
+import { RenderLoop } from '@render/renderLoop';
+import { attachCameraControls } from '@ui/cameraControls';
 
 const root = document.querySelector<HTMLDivElement>('#app');
 if (!root) throw new Error('#app root element not found');
@@ -22,9 +24,12 @@ const renderer = new PlanetRenderer(state.width, state.height);
 renderer.update(state, surfaceMapMode);
 
 const camera = createCamera(8);
+const { surface } = attachCanvasSurface(shell.canvas);
+attachCameraControls(shell.canvas, camera);
 
-// Redraw whenever the surface (re)sizes. A decoupled animation loop and
-// pan/zoom input follow in M2.4.
-attachCanvasSurface(shell.canvas, (surface) => renderer.draw(surface, camera));
+// Render loop runs at display refresh, independent of the (not-yet-running)
+// simulation tick — it just re-blits the current state and camera each frame.
+const loop = new RenderLoop(() => renderer.draw(surface, camera));
+loop.start();
 
 shell.status.textContent = `seed ${state.seed} · ${state.width}×${state.height}`;
