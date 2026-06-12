@@ -27,7 +27,7 @@ Goal: an empty but deployable, tested, typed app skeleton.
 ## M1 — Core sim harness
 Goal: a deterministic, headless, tickable world with serializable state.
 
-- [ ] Seeded PRNG module + tests (reproducibility, distribution sanity).
+- [x] Seeded PRNG module + tests (reproducibility, distribution sanity).
 - [ ] State definition: typed-array SoA fields + global scalars; allocation by W×H.
 - [ ] Tick loop + system-registry ordering; `update(state, dt, rng)` contract.
 - [ ] Grid helpers: index/wrap math (longitude wrap, pole clamping), neighbor iteration + tests.
