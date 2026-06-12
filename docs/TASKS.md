@@ -22,7 +22,7 @@ Goal: an empty but deployable, tested, typed app skeleton.
 - [x] `vite.config.ts` with `base` set for GitHub Pages; relative asset URLs.
 - [x] GitHub Actions workflow: build + deploy `dist/` to Pages.
 - [x] Directory skeleton: `src/sim/`, `src/render/`, `src/ui/`, `src/app/`; lint/format config.
-- [ ] App boots to a blank canvas + empty UI shell.
+- [x] App boots to a blank canvas + empty UI shell.
 
 ## M1 — Core sim harness
 Goal: a deterministic, headless, tickable world with serializable state.
