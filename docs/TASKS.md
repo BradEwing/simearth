@@ -31,7 +31,7 @@ Goal: a deterministic, headless, tickable world with serializable state.
 - [x] State definition: typed-array SoA fields + global scalars; allocation by W×H.
 - [x] Tick loop + system-registry ordering; `update(state, dt, rng)` contract.
 - [x] Grid helpers: index/wrap math (longitude wrap, pole clamping), neighbor iteration + tests.
-- [ ] Save/load: serialize/deserialize full state (incl. seed), versioned; round-trip test.
+- [x] Save/load: serialize/deserialize full state (incl. seed), versioned; round-trip test.
 
 ## M2 — Geosphere + first render
 Goal: see a procedurally generated planet on screen.
