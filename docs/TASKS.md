@@ -18,7 +18,7 @@ each checkbox is sized to be **one atomic commit** (builds green, tests pass).
 Goal: an empty but deployable, tested, typed app skeleton.
 
 - [x] Vite + TypeScript (strict) project; `package.json` scripts (`dev`/`build`/`test`).
-- [ ] Vitest wired with one trivial passing test.
+- [x] Vitest wired with one trivial passing test.
 - [x] `vite.config.ts` with `base` set for GitHub Pages; relative asset URLs.
 - [ ] GitHub Actions workflow: build + deploy `dist/` to Pages.
 - [ ] Directory skeleton: `src/sim/`, `src/render/`, `src/ui/`, `src/app/`; lint/format config.
