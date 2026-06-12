@@ -35,7 +35,7 @@ export interface WorldState {
   meanTemperature: number;
 
   // --- Per-tile fields (length width*height) ---
-  /** Geosphere: surface elevation relative to sea level (negative = below). */
+  /** Geosphere: absolute surface elevation; ocean where `altitude < seaLevel`. */
   altitude: Float32Array;
   /** Geosphere: SurfaceType enum (ocean/coast/land/mountain/ice). */
   surface: Uint8Array;

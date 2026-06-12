@@ -36,7 +36,7 @@ Goal: a deterministic, headless, tickable world with serializable state.
 ## M2 — Geosphere + first render
 Goal: see a procedurally generated planet on screen.
 
-- [ ] Seeded terrain generation (noise → altitude); continents/oceans; tests for determinism.
+- [x] Seeded terrain generation (noise → altitude); continents/oceans; tests for determinism.
 - [ ] Surface classification (ocean/coast/land/mountain/ice) from altitude + sea level.
 - [ ] Canvas tile renderer: altitude/surface map mode; pan/zoom; longitude-wrap rendering.
 - [ ] Render loop decoupled from sim tick; reads state read-only.
