@@ -21,7 +21,7 @@ Goal: an empty but deployable, tested, typed app skeleton.
 - [x] Vitest wired with one trivial passing test.
 - [x] `vite.config.ts` with `base` set for GitHub Pages; relative asset URLs.
 - [ ] GitHub Actions workflow: build + deploy `dist/` to Pages.
-- [ ] Directory skeleton: `src/sim/`, `src/render/`, `src/ui/`, `src/app/`; lint/format config.
+- [x] Directory skeleton: `src/sim/`, `src/render/`, `src/ui/`, `src/app/`; lint/format config.
 - [ ] App boots to a blank canvas + empty UI shell.
 
 ## M1 — Core sim harness
