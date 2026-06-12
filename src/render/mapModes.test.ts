@@ -2,7 +2,8 @@ import { describe, it, expect } from 'vitest';
 import { createWorldState } from '@sim/state';
 import { generateTerrain } from '@sim/geosphere/terrain';
 import { classifySurface, SurfaceType } from '@sim/geosphere/surface';
-import { surfaceMapMode, altitudeMapMode, SURFACE_COLORS } from './mapModes';
+import { surfaceMapMode, altitudeMapMode } from './mapModes';
+import { SURFACE_PALETTE } from './palette';
 
 const buffer = (n: number): Uint8ClampedArray => new Uint8ClampedArray(n * 4);
 
@@ -19,8 +20,10 @@ describe('surfaceMapMode', () => {
     const rgba = buffer(5);
     surfaceMapMode.paint(state, rgba);
 
+    // altitude is 0 everywhere here, so relief shading is a no-op (factor 1):
+    // tiles render at their base palette color.
     for (let i = 0; i < 5; i++) {
-      const c = SURFACE_COLORS[i]!;
+      const c = SURFACE_PALETTE[i]!;
       expect([rgba[i * 4], rgba[i * 4 + 1], rgba[i * 4 + 2]]).toEqual([c[0], c[1], c[2]]);
       expect(rgba[i * 4 + 3]).toBe(255);
     }

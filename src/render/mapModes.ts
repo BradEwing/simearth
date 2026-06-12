@@ -1,5 +1,6 @@
 import type { WorldState } from '@sim/state';
 import { SurfaceType } from '@sim/geosphere/surface';
+import { shadeSurfaceTile } from './palette';
 
 /** An RGB triple in 0–255. */
 export type RGB = readonly [number, number, number];
@@ -30,20 +31,27 @@ const put = (rgba: Uint8ClampedArray, i: number, c: RGB): void => {
   rgba[o + 3] = 255;
 };
 
-/** Surface-type colors, indexed by SurfaceType value. */
-export const SURFACE_COLORS: readonly RGB[] = [
-  [28, 52, 110], // Ocean
-  [74, 130, 175], // Coast
-  [86, 140, 74], // Land
-  [120, 110, 96], // Mountain
-  [232, 240, 248], // Ice
-];
-
-/** Colors the map by surface classification (ocean/coast/land/mountain/ice). */
+/**
+ * Colors the map by surface classification (ocean/coast/land/mountain/ice),
+ * with subtle relief: each tile's color is shaded by its elevation relative to
+ * its hemisphere's range, so deep ocean darkens and high land lightens.
+ */
 function paintSurface(state: WorldState, rgba: Uint8ClampedArray): void {
-  const { surface } = state;
+  const { surface, altitude, seaLevel } = state;
+  let min = Infinity;
+  let max = -Infinity;
+  for (let i = 0; i < altitude.length; i++) {
+    const a = altitude[i]!;
+    if (a < min) min = a;
+    if (a > max) max = a;
+  }
+  const belowSpan = Math.max(1e-6, seaLevel - min);
+  const aboveSpan = Math.max(1e-6, max - seaLevel);
+
   for (let i = 0; i < surface.length; i++) {
-    put(rgba, i, SURFACE_COLORS[surface[i]!] ?? SURFACE_COLORS[0]!);
+    const a = altitude[i]!;
+    const rel = a < seaLevel ? (a - seaLevel) / belowSpan : (a - seaLevel) / aboveSpan;
+    put(rgba, i, shadeSurfaceTile(surface[i] as SurfaceType, rel));
   }
 }
 
