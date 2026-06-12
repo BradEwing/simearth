@@ -29,7 +29,7 @@ Goal: a deterministic, headless, tickable world with serializable state.
 
 - [x] Seeded PRNG module + tests (reproducibility, distribution sanity).
 - [x] State definition: typed-array SoA fields + global scalars; allocation by W×H.
-- [ ] Tick loop + system-registry ordering; `update(state, dt, rng)` contract.
+- [x] Tick loop + system-registry ordering; `update(state, dt, rng)` contract.
 - [ ] Grid helpers: index/wrap math (longitude wrap, pole clamping), neighbor iteration + tests.
 - [ ] Save/load: serialize/deserialize full state (incl. seed), versioned; round-trip test.
 
