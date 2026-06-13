@@ -31,6 +31,20 @@ const TECH_POP_SATURATION = 12;
 /** Minimum population for any tech progress. */
 const TECH_MIN_POP = 0.2;
 
+/** CO₂ emitted per unit mean pollution per tick (the climate feedback). */
+export const CO2_EMISSION_PER_POLLUTION = 3.0;
+
+/**
+ * Pollution intensity per unit population by tech era: negligible before the
+ * Industrial Age (tech 2), rising to a peak around the Information Age (tech 4),
+ * then falling as clean nanotech (tech 6) arrives. The classic industrial hump.
+ */
+export function pollutionIntensity(techLevel: number): number {
+  if (techLevel < 2) return 0;
+  if (techLevel <= 4) return techLevel - 2; // 0 → 2
+  return Math.max(0, 2 - (techLevel - 4)); // 2 → 0
+}
+
 /** Civilization food value by biome (index = Biome value): farmland thrives. */
 const CIV_FOOD: readonly number[] = [
   0, // Barren
@@ -142,8 +156,8 @@ export const civilizationSystem: System = {
     }
     population.set(next);
 
-    // Tech progression: population fuels research, raising ceilings (and, in
-    // M5.3+, pollution). Advance rate scales with population up to saturation.
+    // Tech progression: population fuels research, raising ceilings and
+    // pollution. Advance rate scales with population up to saturation.
     const pop = totalPopulation(state);
     if (pop > TECH_MIN_POP && state.techLevel < MAX_TECH) {
       state.techLevel = Math.min(
@@ -151,5 +165,18 @@ export const civilizationSystem: System = {
         state.techLevel + TECH_RATE * dt * Math.min(pop, TECH_POP_SATURATION),
       );
     }
+
+    // Pollution from population × era intensity; its mean emits CO2 into the
+    // atmosphere, coupling civilization back into the climate (self-warming).
+    const intensity = pollutionIntensity(state.techLevel);
+    const { pollution } = state;
+    let totalPollution = 0;
+    for (let i = 0; i < pollution.length; i++) {
+      const poll = next[i]! * intensity;
+      pollution[i] = poll;
+      totalPollution += poll;
+    }
+    const meanPollution = totalPollution / pollution.length;
+    state.co2 += meanPollution * CO2_EMISSION_PER_POLLUTION * dt;
   },
 };
