@@ -19,5 +19,8 @@ export default defineConfig({
     globals: true,
     environment: 'node',
     include: ['src/**/*.{test,spec}.ts'],
+    // Several sim tests run thousands of deterministic ticks; the default 5s is
+    // too tight on slower CI runners.
+    testTimeout: 30_000,
   },
 });
