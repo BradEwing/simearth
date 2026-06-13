@@ -79,6 +79,33 @@ export interface WorldState {
   pollution: Float32Array;
 }
 
+/**
+ * Copies all of `source`'s data into `target` *in place* (same dimensions
+ * required). Typed-array fields are `.set()`, the RNG object is assigned into
+ * (not replaced), and scalars are copied. Because `target` keeps its identity,
+ * a running Simulation's live RNG and any closures over the state stay valid —
+ * this is how load / new-game swap the world without rebuilding the app.
+ */
+export function copyWorldInto(target: WorldState, source: WorldState): void {
+  if (target.width !== source.width || target.height !== source.height) {
+    throw new Error('copyWorldInto: dimensions must match');
+  }
+  const t = target as unknown as Record<string, unknown>;
+  const s = source as unknown as Record<string, unknown>;
+  for (const key of Object.keys(t)) {
+    if (key === 'width' || key === 'height') continue;
+    const tv = t[key];
+    const sv = s[key];
+    if (ArrayBuffer.isView(tv)) {
+      (tv as unknown as Float32Array).set(sv as unknown as ArrayLike<number>);
+    } else if (key === 'rng') {
+      Object.assign(tv as object, sv as object);
+    } else if (typeof tv === 'number') {
+      t[key] = sv;
+    }
+  }
+}
+
 /** Default planet grid size (SPEC §3.1: cylindrical wrap, 128×64). */
 export const DEFAULT_WIDTH = 128;
 export const DEFAULT_HEIGHT = 64;

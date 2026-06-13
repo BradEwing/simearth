@@ -25,7 +25,8 @@
       "@sim/*": ["./src/sim/*"],
       "@render/*": ["./src/render/*"],
       "@ui/*": ["./src/ui/*"],
-      "@app/*": ["./src/app/*"]
+      "@app/*": ["./src/app/*"],
+      "@persistence/*": ["./src/persistence/*"]
     }
   },
   "include": ["src", "vite.config.ts"]

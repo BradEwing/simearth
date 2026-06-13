@@ -89,7 +89,7 @@ Goal: the player can shape and read the world like the original.
 ## M7 — Persistence, polish, ship
 Goal: shippable MVP.
 
-- [ ] Save/load UI to IndexedDB; multiple named saves.
+- [x] Save/load UI to IndexedDB; multiple named saves.
 - [ ] Export/import planet to file.
 - [ ] New-game flow: seed entry / randomize; starting conditions.
 - [ ] Performance pass at default grid; (optional) move sim into a Web Worker.

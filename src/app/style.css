@@ -133,6 +133,60 @@ body {
   font-variant-numeric: tabular-nums;
 }
 
+.se-saves__form {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 0.5rem;
+}
+
+.se-saves__name {
+  flex: 1;
+  min-width: 0;
+  padding: 0.3rem 0.4rem;
+  font: inherit;
+  font-size: 0.75rem;
+  color: var(--se-text);
+  background: var(--se-bg);
+  border: 1px solid var(--se-panel-edge);
+  border-radius: 3px;
+}
+
+.se-saves__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 2px;
+  font-size: 0.74rem;
+}
+
+.se-saves__list li {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.se-saves__list li span {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--se-text-dim);
+}
+
+.se-saves button,
+.se-saves__list button {
+  padding: 0.25rem 0.5rem;
+  font: inherit;
+  font-size: 0.72rem;
+  color: var(--se-text);
+  background: var(--se-bg);
+  border: 1px solid var(--se-panel-edge);
+  border-radius: 3px;
+  cursor: pointer;
+}
+
 .se-params {
   display: grid;
   gap: 0.35rem;

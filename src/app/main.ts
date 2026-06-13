@@ -1,9 +1,10 @@
 import './style.css';
 import { mountShell } from '@ui/shell';
 import { attachCanvasSurface } from '@render/canvas';
-import { createWorldState } from '@sim/state';
+import { createWorldState, copyWorldInto } from '@sim/state';
 import { generateTerrain } from '@sim/geosphere/terrain';
 import { classifySurface } from '@sim/geosphere/surface';
+import { deserializeWorld } from '@sim/serialization';
 import { initClimate } from '@sim/atmosphere/climate';
 import { Simulation } from '@sim/simulation';
 import { WORLD_SYSTEMS } from '@sim/worldSystems';
@@ -18,6 +19,7 @@ import { createSpeedControl } from '@ui/speedControl';
 import { createMapModeSwitcher } from '@ui/mapModeSwitcher';
 import { createGaiaPanel } from '@ui/gaiaPanel';
 import { createModelParams } from '@ui/modelParams';
+import { createSaveLoadPanel } from '@ui/saveLoadPanel';
 import { TOOLS } from '@ui/tools';
 import { createToolPalette } from '@ui/toolPalette';
 import { attachToolInput } from '@ui/toolInput';
@@ -81,7 +83,18 @@ attachToolInput(shell.canvas, {
 // Model-parameter sliders live under the Gaia read-outs.
 gaiaPanel.element.append(createModelParams(state, repaint));
 
-shell.panel.replaceChildren(gaiaPanel.element, mapSection, toolSection);
+// Save/load: loaded worlds are copied into the live state in place, so the
+// running simulation and all UI bindings stay valid.
+const saveSection = createSaveLoadPanel({
+  getState: () => state,
+  now: () => Date.now(),
+  applyLoaded: (world) => {
+    copyWorldInto(state, deserializeWorld(world));
+    repaint();
+  },
+});
+
+shell.panel.replaceChildren(gaiaPanel.element, mapSection, toolSection, saveSection);
 
 // Single rAF loop: advance the sim by elapsed real time at the chosen speed,
 // repaint the map buffer when the world changed, then draw at refresh rate.

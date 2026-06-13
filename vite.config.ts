@@ -12,6 +12,7 @@ export default defineConfig({
       '@render': fileURLToPath(new URL('./src/render', import.meta.url)),
       '@ui': fileURLToPath(new URL('./src/ui', import.meta.url)),
       '@app': fileURLToPath(new URL('./src/app', import.meta.url)),
+      '@persistence': fileURLToPath(new URL('./src/persistence', import.meta.url)),
     },
   },
   test: {
