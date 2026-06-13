@@ -69,7 +69,7 @@ Goal: life that spreads, evolves, and regulates the planet.
 ## M5 — Civilization & win condition
 Goal: a complete playable arc ending in Exodus.
 
-- [ ] Settlement founding from a sentient species; spread across habitable land.
+- [x] Settlement founding from a sentient species; spread across habitable land.
 - [ ] Tech progression (condensed eras) raising population ceilings.
 - [ ] Pollution from tech/population feeding CO₂/pollution fields (climate feedback).
 - [ ] Pollution map mode; population/city rendering.

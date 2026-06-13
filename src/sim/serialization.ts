@@ -36,6 +36,8 @@ export interface SerializedWorld {
     meanTemperature: number;
     sentienceProgress: number;
     sentienceEmergedTick: number;
+    techLevel: number;
+    exodusTick: number;
   };
   fields: Record<string, SerializedField>;
 }
@@ -101,6 +103,8 @@ export function serializeWorld(state: WorldState): SerializedWorld {
       meanTemperature: state.meanTemperature,
       sentienceProgress: state.sentienceProgress,
       sentienceEmergedTick: state.sentienceEmergedTick,
+      techLevel: state.techLevel,
+      exodusTick: state.exodusTick,
     },
     fields,
   };
@@ -133,6 +137,8 @@ export function deserializeWorld(data: SerializedWorld): WorldState {
   state.meanTemperature = data.scalars.meanTemperature;
   state.sentienceProgress = data.scalars.sentienceProgress;
   state.sentienceEmergedTick = data.scalars.sentienceEmergedTick;
+  state.techLevel = data.scalars.techLevel;
+  state.exodusTick = data.scalars.exodusTick;
 
   const target = state as unknown as Record<string, unknown>;
   for (const [key, field] of Object.entries(data.fields)) {

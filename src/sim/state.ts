@@ -39,6 +39,10 @@ export interface WorldState {
   sentienceProgress: number;
   /** Tick a sentient species emerged (−1 if not yet); bridges to civilization. */
   sentienceEmergedTick: number;
+  /** Civilization tech level (0 = pre-civ, rising through eras to Exodus). */
+  techLevel: number;
+  /** Tick the Exodus (win) was achieved (−1 if not yet). */
+  exodusTick: number;
 
   // --- Per-tile fields (length width*height) ---
   /** Geosphere: absolute surface elevation; ocean where `altitude < seaLevel`. */
@@ -63,6 +67,8 @@ export interface WorldState {
   biomass: Float32Array;
   /** Biosphere: most-advanced life class present per tile (LifeClass enum). */
   lifeStage: Uint8Array;
+  /** Civilization: settlement population density per tile (0–1). */
+  population: Float32Array;
   /** Civilization: pollution level (feeds back into climate). */
   pollution: Float32Array;
 }
@@ -107,6 +113,8 @@ export function createWorldState(options: WorldOptions = {}): WorldState {
     meanTemperature: 0,
     sentienceProgress: 0,
     sentienceEmergedTick: -1,
+    techLevel: 0,
+    exodusTick: -1,
 
     altitude: new Float32Array(n),
     surface: new Uint8Array(n),
@@ -120,6 +128,7 @@ export function createWorldState(options: WorldOptions = {}): WorldState {
     biome: new Uint8Array(n),
     biomass: new Float32Array(n),
     lifeStage: new Uint8Array(n),
+    population: new Float32Array(n),
     pollution: new Float32Array(n),
   };
 }
