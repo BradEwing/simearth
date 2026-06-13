@@ -31,10 +31,46 @@ export function createSaveLoadPanel(opts: SaveLoadOptions): HTMLElement {
   saveBtn.className = 'se-saves__save';
   form.append(input, saveBtn);
 
+  // Export / import to a file (shareable, independent of IndexedDB).
+  const fileRow = document.createElement('div');
+  fileRow.className = 'se-saves__form';
+  const exportBtn = document.createElement('button');
+  exportBtn.textContent = 'Export';
+  const importBtn = document.createElement('button');
+  importBtn.textContent = 'Import';
+  const fileInput = document.createElement('input');
+  fileInput.type = 'file';
+  fileInput.accept = 'application/json,.json';
+  fileInput.hidden = true;
+  fileRow.append(exportBtn, importBtn, fileInput);
+
   const list = document.createElement('ul');
   list.className = 'se-saves__list';
 
-  element.append(heading, form, list);
+  element.append(heading, form, fileRow, list);
+
+  exportBtn.addEventListener('click', () => {
+    const json = JSON.stringify(serializeWorld(opts.getState()));
+    const url = URL.createObjectURL(new Blob([json], { type: 'application/json' }));
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `planet-t${opts.getState().tick}.simearth.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+  });
+
+  importBtn.addEventListener('click', () => fileInput.click());
+  fileInput.addEventListener('change', async () => {
+    const file = fileInput.files?.[0];
+    if (!file) return;
+    try {
+      const world = JSON.parse(await file.text()) as SerializedWorld;
+      opts.applyLoaded(world);
+    } catch {
+      // Invalid file — ignore (a real UI would surface an error toast).
+    }
+    fileInput.value = '';
+  });
 
   async function refresh(): Promise<void> {
     const saves = await listSaves();

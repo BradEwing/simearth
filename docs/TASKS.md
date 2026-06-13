@@ -90,7 +90,7 @@ Goal: the player can shape and read the world like the original.
 Goal: shippable MVP.
 
 - [x] Save/load UI to IndexedDB; multiple named saves.
-- [ ] Export/import planet to file.
+- [x] Export/import planet to file.
 - [ ] New-game flow: seed entry / randomize; starting conditions.
 - [ ] Performance pass at default grid; (optional) move sim into a Web Worker.
 - [ ] Onboarding/help overlay; basic responsive layout.
