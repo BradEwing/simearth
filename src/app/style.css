@@ -114,6 +114,25 @@ body {
   font-size: 0.8rem;
 }
 
+.se-readout {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.15rem 0.6rem;
+  margin: 0 0 1rem;
+  font-size: 0.78rem;
+}
+
+.se-readout dt {
+  color: var(--se-text-dim);
+}
+
+.se-readout dd {
+  margin: 0;
+  text-align: right;
+  color: var(--se-text);
+  font-variant-numeric: tabular-nums;
+}
+
 .se-mapmodes {
   display: grid;
   grid-template-columns: 1fr 1fr;

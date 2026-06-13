@@ -16,6 +16,7 @@ import { attachCameraControls } from '@ui/cameraControls';
 import { SimClock } from './simClock';
 import { createSpeedControl } from '@ui/speedControl';
 import { createMapModeSwitcher } from '@ui/mapModeSwitcher';
+import { createGaiaPanel } from '@ui/gaiaPanel';
 
 const root = document.querySelector<HTMLDivElement>('#app');
 if (!root) throw new Error('#app root element not found');
@@ -51,7 +52,10 @@ mapSection.append(
     renderer.update(state, mode); // repaint immediately, even when paused
   }),
 );
-shell.panel.replaceChildren(mapSection);
+
+const gaiaPanel = createGaiaPanel();
+gaiaPanel.update(state);
+shell.panel.replaceChildren(gaiaPanel.element, mapSection);
 
 // Single rAF loop: advance the sim by elapsed real time at the chosen speed,
 // repaint the map buffer when the world changed, then draw at refresh rate.
@@ -60,6 +64,7 @@ const loop = new RenderLoop((dtMs) => {
   for (let i = 0; i < steps; i++) sim.tick();
   if (steps > 0) {
     renderer.update(state, activeMapMode);
+    gaiaPanel.update(state);
     shell.status.textContent = `tick ${state.tick} · ${state.meanTemperature.toFixed(1)}°C · ${eraName(state.techLevel)}`;
   }
   renderer.draw(surface, camera);
