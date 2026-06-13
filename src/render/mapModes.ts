@@ -52,13 +52,19 @@ function paintSurface(state: WorldState, rgba: Uint8ClampedArray): void {
   const belowSpan = Math.max(1e-6, seaLevel - min);
   const aboveSpan = Math.max(1e-6, max - seaLevel);
 
+  const { population } = state;
   for (let i = 0; i < surface.length; i++) {
     const a = altitude[i]!;
     const rel = a < seaLevel ? (a - seaLevel) / belowSpan : (a - seaLevel) / aboveSpan;
-    const base = shadeSurfaceTile(surface[i] as SurfaceType, rel);
-    put(rgba, i, ice[i]! > 0 ? lerpRGB(base, ICE_WHITE, ice[i]!) : base);
+    let c = shadeSurfaceTile(surface[i] as SurfaceType, rel);
+    if (ice[i]! > 0) c = lerpRGB(c, ICE_WHITE, ice[i]!);
+    // Overlay cities: tiles with settlement population glow urban.
+    if (population[i]! > 0.05) c = lerpRGB(c, CITY_COLOR, Math.min(1, population[i]!));
+    put(rgba, i, c);
   }
 }
+
+const CITY_COLOR: RGB = [232, 224, 150];
 
 // Hypsometric ramps: ocean depth (deep→shallow) and land height (low→peak).
 const OCEAN_DEEP: RGB = [12, 26, 64];
@@ -218,10 +224,64 @@ function paintLife(state: WorldState, rgba: Uint8ClampedArray): void {
   }
 }
 
+// Population ramp: empty dark → dense city-light gold.
+const POP_EMPTY: RGB = [18, 22, 30];
+const POP_SPARSE: RGB = [120, 90, 60];
+const POP_DENSE: RGB = [240, 220, 120];
+
+/** Colors the map by settlement population density. */
+function paintPopulation(state: WorldState, rgba: Uint8ClampedArray): void {
+  const { population } = state;
+  let max = 1e-6;
+  for (let i = 0; i < population.length; i++)
+    if (population[i]! > max) max = population[i]!;
+  for (let i = 0; i < population.length; i++) {
+    const p = population[i]!;
+    if (p < 1e-4) {
+      put(rgba, i, POP_EMPTY);
+      continue;
+    }
+    const t = p / max;
+    put(rgba, i, t < 0.5 ? lerpRGB(POP_SPARSE, POP_DENSE, t * 2) : POP_DENSE);
+  }
+}
+
+// Pollution ramp: clean dark → hazy brown → toxic red.
+const POLL_CLEAN: RGB = [22, 30, 28];
+const POLL_HAZY: RGB = [130, 110, 60];
+const POLL_TOXIC: RGB = [200, 70, 50];
+
+/** Colors the map by pollution level, normalized to the current maximum. */
+function paintPollution(state: WorldState, rgba: Uint8ClampedArray): void {
+  const { pollution } = state;
+  let max = 1e-6;
+  for (let i = 0; i < pollution.length; i++) if (pollution[i]! > max) max = pollution[i]!;
+  for (let i = 0; i < pollution.length; i++) {
+    const t = pollution[i]! / max;
+    const c =
+      t < 0.5
+        ? lerpRGB(POLL_CLEAN, POLL_HAZY, t * 2)
+        : lerpRGB(POLL_HAZY, POLL_TOXIC, (t - 0.5) * 2);
+    put(rgba, i, c);
+  }
+}
+
 export const surfaceMapMode: MapMode = {
   id: 'surface',
   label: 'Surface',
   paint: paintSurface,
+};
+
+export const populationMapMode: MapMode = {
+  id: 'population',
+  label: 'Population',
+  paint: paintPopulation,
+};
+
+export const pollutionMapMode: MapMode = {
+  id: 'pollution',
+  label: 'Pollution',
+  paint: paintPollution,
 };
 
 export const biomeMapMode: MapMode = {
@@ -276,6 +336,8 @@ export const MAP_MODES: readonly MapMode[] = [
   currentMapMode,
   biomeMapMode,
   lifeMapMode,
+  populationMapMode,
+  pollutionMapMode,
 ];
 
 export { SurfaceType };

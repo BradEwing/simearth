@@ -72,7 +72,7 @@ Goal: a complete playable arc ending in Exodus.
 - [x] Settlement founding from a sentient species; spread across habitable land.
 - [x] Tech progression (condensed eras) raising population ceilings.
 - [x] Pollution from tech/population feeding CO₂/pollution fields (climate feedback).
-- [ ] Pollution map mode; population/city rendering.
+- [x] Pollution map mode; population/city rendering.
 - [ ] Exodus win condition + victory screen.
 
 ## M6 — Player tools & model panels
