@@ -9,12 +9,13 @@ import { Simulation } from '@sim/simulation';
 import { WORLD_SYSTEMS } from '@sim/worldSystems';
 import { eraName } from '@sim/civilization/civilization';
 import { PlanetRenderer } from '@render/planetRenderer';
-import { surfaceMapMode } from '@render/mapModes';
+import { surfaceMapMode, MAP_MODES, type MapMode } from '@render/mapModes';
 import { createCamera } from '@render/camera';
 import { RenderLoop } from '@render/renderLoop';
 import { attachCameraControls } from '@ui/cameraControls';
 import { SimClock } from './simClock';
 import { createSpeedControl } from '@ui/speedControl';
+import { createMapModeSwitcher } from '@ui/mapModeSwitcher';
 
 const root = document.querySelector<HTMLDivElement>('#app');
 if (!root) throw new Error('#app root element not found');
@@ -31,13 +32,26 @@ const sim = new Simulation(state, WORLD_SYSTEMS);
 const clock = new SimClock();
 const renderer = new PlanetRenderer(state.width, state.height);
 const camera = createCamera(8);
-const activeMapMode = surfaceMapMode;
+let activeMapMode: MapMode = surfaceMapMode;
 
 renderer.update(state, activeMapMode);
 
 const { surface } = attachCanvasSurface(shell.canvas);
 attachCameraControls(shell.canvas, camera);
 shell.topbar.append(createSpeedControl(clock));
+
+// Side panel: map-mode switcher (Gaia read-outs added in M6.5).
+const mapSection = document.createElement('section');
+const mapHeading = document.createElement('h2');
+mapHeading.textContent = 'Map';
+mapSection.append(
+  mapHeading,
+  createMapModeSwitcher(MAP_MODES, activeMapMode, (mode) => {
+    activeMapMode = mode;
+    renderer.update(state, mode); // repaint immediately, even when paused
+  }),
+);
+shell.panel.replaceChildren(mapSection);
 
 // Single rAF loop: advance the sim by elapsed real time at the chosen speed,
 // repaint the map buffer when the world changed, then draw at refresh rate.

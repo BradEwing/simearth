@@ -114,6 +114,30 @@ body {
   font-size: 0.8rem;
 }
 
+.se-mapmodes {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3px;
+}
+
+.se-mapmode__btn {
+  padding: 0.35rem 0.4rem;
+  font: inherit;
+  font-size: 0.72rem;
+  color: var(--se-text-dim);
+  background: var(--se-bg);
+  border: 1px solid var(--se-panel-edge);
+  border-radius: 3px;
+  cursor: pointer;
+  text-align: left;
+}
+
+.se-mapmode__btn.is-active {
+  color: var(--se-bg);
+  background: var(--se-accent);
+  border-color: var(--se-accent);
+}
+
 .se-victory {
   position: fixed;
   inset: 0;

@@ -81,7 +81,7 @@ Goal: the player can shape and read the world like the original.
 - [ ] Tool framework + action/command interface into sim (no direct mutation from UI).
 - [ ] Terraform (raise/lower), water add/remove tools.
 - [ ] Event tools: volcano, meteor, earthquake.
-- [ ] Map-mode switcher UI for all overlays.
+- [x] Map-mode switcher UI for all overlays.
 - [ ] Gaia/model panel: live planetary read-outs (temp, CO₂/O₂, sea level, biomass, pop, solar, era).
 - [ ] Adjustable model parameter(s) (e.g., greenhouse strength) for experimentation.
 - [x] Speed control (pause/slow/normal/fast).
