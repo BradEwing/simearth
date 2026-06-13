@@ -46,7 +46,7 @@ Goal: see a procedurally generated planet on screen.
 Goal: a planet with a regulating climate.
 
 - [x] Latitude insolation + base temperature field; temperature map mode.
-- [ ] Greenhouse: CO₂ scalar → temperature forcing; volcanic/respiration sources.
+- [x] Greenhouse: CO₂ scalar → temperature forcing; volcanic/respiration sources.
 - [ ] Rising solar luminosity over ticks (stellar evolution).
 - [ ] Carbonate–silicate weathering: temperature-dependent CO₂ drawdown (negative feedback).
 - [ ] Albedo from ice/surface → feedback; ice-age hysteresis.

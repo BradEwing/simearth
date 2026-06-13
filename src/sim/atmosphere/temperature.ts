@@ -2,6 +2,7 @@ import type { System } from '../simulation';
 import type { WorldState } from '../state';
 import { latitudeOf } from '../grid';
 import { insolationFactor, areaWeight } from './insolation';
+import { co2Forcing } from './greenhouse';
 import {
   SOLAR_CONSTANT,
   OLR_A,
@@ -30,9 +31,9 @@ function meanInsolation(height: number): number {
  * `T̄ = (absorbed̄ − A_eff) / B`. Each tile then relaxes toward `T̄` by latitude:
  * `T_i = (absorbed_i − A_eff + C·T̄) / (B + C)`.
  *
- * Greenhouse forcing (which lowers `A_eff`) and surface/ice albedo arrive in
- * M3.2 / M3.5; this baseline uses a flat albedo and no greenhouse, giving a pure
- * latitude gradient (warm equator, cold poles).
+ * Greenhouse forcing lowers `A_eff` (`co2Forcing`), warming the planet with CO₂.
+ * Surface/ice albedo replaces the flat baseline in M3.5; until then temperature
+ * varies by latitude and the global CO₂/solar state, but not by surface type.
  */
 export const temperatureSystem: System = {
   name: 'temperature',
@@ -40,7 +41,7 @@ export const temperatureSystem: System = {
     const { width, height, temperature, solarLuminosity } = state;
 
     const absorbed = (SOLAR_CONSTANT / 4) * solarLuminosity * (1 - PLANETARY_ALBEDO);
-    const aEff = OLR_A; // no greenhouse yet (M3.2)
+    const aEff = OLR_A - co2Forcing(state.co2); // greenhouse lowers outgoing LW
 
     const tBar = (absorbed * meanInsolation(height) - aEff) / OLR_B;
 
