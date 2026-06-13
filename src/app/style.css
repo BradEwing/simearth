@@ -133,6 +133,32 @@ body {
   font-variant-numeric: tabular-nums;
 }
 
+.se-params {
+  display: grid;
+  gap: 0.35rem;
+  margin-top: 0.8rem;
+}
+
+.se-param {
+  display: grid;
+  grid-template-columns: 4.5rem 1fr 2.4rem;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.74rem;
+  color: var(--se-text-dim);
+}
+
+.se-param input[type='range'] {
+  width: 100%;
+  accent-color: var(--se-accent);
+}
+
+.se-param__value {
+  text-align: right;
+  color: var(--se-text);
+  font-variant-numeric: tabular-nums;
+}
+
 .se-mapmodes,
 .se-tools {
   display: grid;

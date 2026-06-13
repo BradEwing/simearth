@@ -17,6 +17,7 @@ import { SimClock } from './simClock';
 import { createSpeedControl } from '@ui/speedControl';
 import { createMapModeSwitcher } from '@ui/mapModeSwitcher';
 import { createGaiaPanel } from '@ui/gaiaPanel';
+import { createModelParams } from '@ui/modelParams';
 import { TOOLS } from '@ui/tools';
 import { createToolPalette } from '@ui/toolPalette';
 import { attachToolInput } from '@ui/toolInput';
@@ -76,6 +77,9 @@ attachToolInput(shell.canvas, {
   state,
   onApplied: repaint,
 });
+
+// Model-parameter sliders live under the Gaia read-outs.
+gaiaPanel.element.append(createModelParams(state, repaint));
 
 shell.panel.replaceChildren(gaiaPanel.element, mapSection, toolSection);
 

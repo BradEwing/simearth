@@ -24,8 +24,8 @@ export const temperatureSystem: System = {
   name: 'temperature',
   update(state: WorldState): void {
     const { width, height, temperature } = state;
-    const solarFlux = (SOLAR_CONSTANT / 4) * state.solarLuminosity;
-    const aEff = OLR_A - co2Forcing(state.co2);
+    const solarFlux = (SOLAR_CONSTANT / 4) * state.solarLuminosity * state.solarFactor;
+    const aEff = OLR_A - co2Forcing(state.co2) * state.greenhouseFactor;
 
     // cos-weighted mean of (1 − albedo)·insolation → exact global mean temp.
     let wsum = 0;

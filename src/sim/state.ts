@@ -44,6 +44,12 @@ export interface WorldState {
   /** Tick the Exodus (win) was achieved (−1 if not yet). */
   exodusTick: number;
 
+  // --- Adjustable model parameters (player "model" knobs; default 1 = normal) ---
+  /** Multiplier on CO₂ greenhouse forcing. >1 amplifies warming, <1 weakens it. */
+  greenhouseFactor: number;
+  /** Multiplier on solar input, for experimentation. */
+  solarFactor: number;
+
   // --- Per-tile fields (length width*height) ---
   /** Geosphere: absolute surface elevation; ocean where `altitude < seaLevel`. */
   altitude: Float32Array;
@@ -115,6 +121,8 @@ export function createWorldState(options: WorldOptions = {}): WorldState {
     sentienceEmergedTick: -1,
     techLevel: 0,
     exodusTick: -1,
+    greenhouseFactor: 1,
+    solarFactor: 1,
 
     altitude: new Float32Array(n),
     surface: new Uint8Array(n),
