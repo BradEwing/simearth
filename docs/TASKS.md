@@ -60,7 +60,7 @@ Goal: a planet with a regulating climate.
 Goal: life that spreads, evolves, and regulates the planet.
 
 - [x] Biome assignment from temperature × rainfall (Whittaker); biome map mode + palette.
-- [ ] Biome effects on albedo and carbon uptake (close Gaia loop with life).
+- [x] Biome effects on albedo and carbon uptake (close Gaia loop with life).
 - [ ] Life-class model: tolerances, spreading into suitable neighbors, competition, decline.
 - [ ] Life map mode; place-life tool.
 - [ ] Sentience accumulation + threshold → sentient-species event.

@@ -20,6 +20,26 @@ export const Biome = {
 } as const;
 export type Biome = (typeof Biome)[keyof typeof Biome];
 
+/**
+ * Effective planetary albedo of each biome (vegetation, cloud-inclusive),
+ * indexed by Biome. Dark forests/rainforest absorb (warm the surface); bright
+ * deserts and tundra reflect (cool it) — the vegetation-albedo feedback that
+ * lets the biosphere nudge climate (Daisyworld-style). Applied in `albedoAt`
+ * scaled by a tile's biomass.
+ */
+export const BIOME_ALBEDO: readonly number[] = [
+  0.3, // Barren
+  0.35, // Tundra
+  0.18, // Taiga
+  0.26, // Grassland
+  0.28, // Shrubland
+  0.16, // TemperateForest
+  0.27, // Savanna
+  0.37, // Desert
+  0.14, // Rainforest
+  0.18, // Wetland
+];
+
 // Rainfall band thresholds (abstract units matching the weather model output).
 const ARID = 0.25;
 const SEMIARID = 0.6;

@@ -40,18 +40,42 @@ function weatherableFraction(state: WorldState): number {
 }
 
 /**
+ * How much life enhances weathering: roots, soil acids, and litter accelerate
+ * silicate weathering several-fold. Scales with mean biomass over weatherable
+ * land — a lush planet draws CO₂ down harder than a barren one.
+ */
+export const BIOTIC_WEATHERING_BOOST = 1.5;
+
+/** Mean biomass over ice-free land (the biotic weathering multiplier's input). */
+function meanLandBiomass(state: WorldState): number {
+  const { surface, ice, biomass } = state;
+  let sum = 0;
+  let n = 0;
+  for (let i = 0; i < surface.length; i++) {
+    const s = surface[i];
+    if (s === SurfaceType.Land || s === SurfaceType.Coast || s === SurfaceType.Mountain) {
+      sum += biomass[i]! * (1 - ice[i]!);
+      n++;
+    }
+  }
+  return n > 0 ? sum / n : 0;
+}
+
+/**
  * Carbonate–silicate weathering rate (CO₂ removed per tick). Rises with
- * temperature (Arrhenius-like) and with exposed land area. Calibrated so that at
- * `WEATHERING_T_REF` on a `LAND_REFERENCE` planet it equals {@link
- * VOLCANIC_OUTGASSING} — i.e. the equilibrium temperature is the reference.
- * Life amplifies this in M4.
+ * temperature (Arrhenius-like), with exposed land area, and with life cover
+ * (biotic enhancement). Calibrated so that at `WEATHERING_T_REF` on a bare
+ * `LAND_REFERENCE` planet it equals {@link VOLCANIC_OUTGASSING} — pinning the
+ * abiotic equilibrium temperature to the reference. Vegetation pushes the
+ * equilibrium cooler by drawing CO₂ down faster.
  */
 export function silicateWeathering(state: WorldState): number {
   const land = weatherableFraction(state);
   const tempFactor = Math.exp(
     (state.meanTemperature - WEATHERING_T_REF) / WEATHERING_T_SCALE,
   );
-  return VOLCANIC_OUTGASSING * (land / LAND_REFERENCE) * tempFactor;
+  const biotic = 1 + BIOTIC_WEATHERING_BOOST * meanLandBiomass(state);
+  return VOLCANIC_OUTGASSING * (land / LAND_REFERENCE) * tempFactor * biotic;
 }
 
 /**
