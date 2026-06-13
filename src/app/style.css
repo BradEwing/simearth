@@ -133,10 +133,29 @@ body {
   font-variant-numeric: tabular-nums;
 }
 
-.se-mapmodes {
+.se-mapmodes,
+.se-tools {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 3px;
+}
+
+.se-tool__btn {
+  padding: 0.35rem 0.4rem;
+  font: inherit;
+  font-size: 0.72rem;
+  color: var(--se-text-dim);
+  background: var(--se-bg);
+  border: 1px solid var(--se-panel-edge);
+  border-radius: 3px;
+  cursor: pointer;
+  text-align: left;
+}
+
+.se-tool__btn.is-active {
+  color: var(--se-bg);
+  background: var(--se-accent-warm);
+  border-color: var(--se-accent-warm);
 }
 
 .se-mapmode__btn {

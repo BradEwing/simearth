@@ -17,6 +17,9 @@ import { SimClock } from './simClock';
 import { createSpeedControl } from '@ui/speedControl';
 import { createMapModeSwitcher } from '@ui/mapModeSwitcher';
 import { createGaiaPanel } from '@ui/gaiaPanel';
+import { TOOLS } from '@ui/tools';
+import { createToolPalette } from '@ui/toolPalette';
+import { attachToolInput } from '@ui/toolInput';
 
 const root = document.querySelector<HTMLDivElement>('#app');
 if (!root) throw new Error('#app root element not found');
@@ -55,7 +58,26 @@ mapSection.append(
 
 const gaiaPanel = createGaiaPanel();
 gaiaPanel.update(state);
-shell.panel.replaceChildren(gaiaPanel.element, mapSection);
+
+// Tools section + click-to-apply on the map.
+const toolSection = document.createElement('section');
+const toolHeading = document.createElement('h2');
+toolHeading.textContent = 'Tools';
+const palette = createToolPalette(TOOLS);
+toolSection.append(toolHeading, palette.element);
+
+const repaint = (): void => {
+  renderer.update(state, activeMapMode);
+  gaiaPanel.update(state);
+};
+attachToolInput(shell.canvas, {
+  getTool: palette.active,
+  getCamera: () => camera,
+  state,
+  onApplied: repaint,
+});
+
+shell.panel.replaceChildren(gaiaPanel.element, mapSection, toolSection);
 
 // Single rAF loop: advance the sim by elapsed real time at the chosen speed,
 // repaint the map buffer when the world changed, then draw at refresh rate.
