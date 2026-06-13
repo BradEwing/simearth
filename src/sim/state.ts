@@ -57,6 +57,8 @@ export interface WorldState {
   biome: Uint8Array;
   /** Biosphere: total life cover per tile (0–1); scales biotic albedo/carbon. */
   biomass: Float32Array;
+  /** Biosphere: most-advanced life class present per tile (LifeClass enum). */
+  lifeStage: Uint8Array;
   /** Civilization: pollution level (feeds back into climate). */
   pollution: Float32Array;
 }
@@ -111,6 +113,7 @@ export function createWorldState(options: WorldOptions = {}): WorldState {
     ice: new Float32Array(n),
     biome: new Uint8Array(n),
     biomass: new Float32Array(n),
+    lifeStage: new Uint8Array(n),
     pollution: new Float32Array(n),
   };
 }
