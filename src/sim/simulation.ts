@@ -28,7 +28,7 @@ export class Simulation {
   private readonly systems: System[];
   private readonly rng: Rng;
 
-  constructor(state: WorldState, systems: System[] = []) {
+  constructor(state: WorldState, systems: readonly System[] = []) {
     this.state = state;
     this.systems = [...systems];
     this.rng = restoreRng(state.rng);

@@ -54,7 +54,7 @@ Goal: a planet with a regulating climate.
 - [x] Ocean currents vector field + heat advection; current map mode.
 - [x] Wind bands + rainfall (orographic + rain shadow); rainfall/wind map modes.
 - [x] Erosion driven by rainfall/slope feeding back into geosphere.
-- [ ] **Integration checkpoint:** verify emergent regulation holds mean temp habitable as the sun brightens (headless test over many ticks).
+- [x] **Integration checkpoint:** verify emergent regulation holds mean temp habitable as the sun brightens (headless test over many ticks).
 
 ## M4 — Biosphere
 Goal: life that spreads, evolves, and regulates the planet.
