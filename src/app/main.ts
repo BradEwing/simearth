@@ -1,11 +1,9 @@
 import './style.css';
 import { mountShell } from '@ui/shell';
 import { attachCanvasSurface } from '@render/canvas';
-import { createWorldState, copyWorldInto } from '@sim/state';
-import { generateTerrain } from '@sim/geosphere/terrain';
-import { classifySurface } from '@sim/geosphere/surface';
+import { copyWorldInto } from '@sim/state';
+import { createPlanet } from '@sim/worldgen';
 import { deserializeWorld } from '@sim/serialization';
-import { initClimate } from '@sim/atmosphere/climate';
 import { Simulation } from '@sim/simulation';
 import { WORLD_SYSTEMS } from '@sim/worldSystems';
 import { eraName } from '@sim/civilization/civilization';
@@ -20,6 +18,7 @@ import { createMapModeSwitcher } from '@ui/mapModeSwitcher';
 import { createGaiaPanel } from '@ui/gaiaPanel';
 import { createModelParams } from '@ui/modelParams';
 import { createSaveLoadPanel } from '@ui/saveLoadPanel';
+import { createNewGamePanel } from '@ui/newGamePanel';
 import { TOOLS } from '@ui/tools';
 import { createToolPalette } from '@ui/toolPalette';
 import { attachToolInput } from '@ui/toolInput';
@@ -29,11 +28,8 @@ if (!root) throw new Error('#app root element not found');
 
 const shell = mountShell(root);
 
-// Build and seed a living planet. (New-game flow / seed entry arrives in M7.)
-const state = createWorldState({ seed: 'simearth' });
-generateTerrain(state);
-classifySurface(state);
-initClimate(state);
+// Build and seed a living planet.
+const state = createPlanet({ seed: 'simearth' });
 
 const sim = new Simulation(state, WORLD_SYSTEMS);
 const clock = new SimClock();
@@ -94,7 +90,21 @@ const saveSection = createSaveLoadPanel({
   },
 });
 
-shell.panel.replaceChildren(gaiaPanel.element, mapSection, toolSection, saveSection);
+const newGameSection = createNewGamePanel({
+  randomSeed: () => Math.random().toString(36).slice(2, 9),
+  onNewPlanet: (seed) => {
+    copyWorldInto(state, createPlanet({ seed }));
+    repaint();
+  },
+});
+
+shell.panel.replaceChildren(
+  gaiaPanel.element,
+  newGameSection,
+  mapSection,
+  toolSection,
+  saveSection,
+);
 
 // Single rAF loop: advance the sim by elapsed real time at the chosen speed,
 // repaint the map buffer when the world changed, then draw at refresh rate.

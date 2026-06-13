@@ -91,7 +91,7 @@ Goal: shippable MVP.
 
 - [x] Save/load UI to IndexedDB; multiple named saves.
 - [x] Export/import planet to file.
-- [ ] New-game flow: seed entry / randomize; starting conditions.
+- [x] New-game flow: seed entry / randomize; starting conditions.
 - [ ] Performance pass at default grid; (optional) move sim into a Web Worker.
 - [ ] Onboarding/help overlay; basic responsive layout.
 - [ ] Deploy to GitHub Pages; verify the live build end-to-end.

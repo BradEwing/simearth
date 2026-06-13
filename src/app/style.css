@@ -133,10 +133,22 @@ body {
   font-variant-numeric: tabular-nums;
 }
 
-.se-saves__form {
+.se-saves__form,
+.se-newgame__form {
   display: flex;
   gap: 4px;
   margin-bottom: 0.5rem;
+}
+
+.se-newgame__form button {
+  padding: 0.25rem 0.5rem;
+  font: inherit;
+  font-size: 0.72rem;
+  color: var(--se-text);
+  background: var(--se-bg);
+  border: 1px solid var(--se-panel-edge);
+  border-radius: 3px;
+  cursor: pointer;
 }
 
 .se-saves__name {
