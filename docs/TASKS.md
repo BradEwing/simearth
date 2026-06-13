@@ -59,7 +59,7 @@ Goal: a planet with a regulating climate.
 ## M4 — Biosphere
 Goal: life that spreads, evolves, and regulates the planet.
 
-- [ ] Biome assignment from temperature × rainfall (Whittaker); biome map mode + palette.
+- [x] Biome assignment from temperature × rainfall (Whittaker); biome map mode + palette.
 - [ ] Biome effects on albedo and carbon uptake (close Gaia loop with life).
 - [ ] Life-class model: tolerances, spreading into suitable neighbors, competition, decline.
 - [ ] Life map mode; place-life tool.

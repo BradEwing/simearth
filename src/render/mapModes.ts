@@ -1,5 +1,6 @@
 import type { WorldState } from '@sim/state';
 import { SurfaceType } from '@sim/geosphere/surface';
+import { Biome } from '@sim/biosphere/biome';
 import { shadeSurfaceTile } from './palette';
 
 /** An RGB triple in 0–255. */
@@ -165,10 +166,38 @@ function paintWind(state: WorldState, rgba: Uint8ClampedArray): void {
   }
 }
 
+/** Biome colors, indexed by Biome value. */
+const BIOME_COLORS: readonly RGB[] = [
+  [28, 52, 110], // Barren (ocean/ice → deep blue)
+  [200, 208, 214], // Tundra
+  [64, 104, 92], // Taiga
+  [156, 176, 92], // Grassland
+  [150, 150, 96], // Shrubland
+  [56, 120, 60], // TemperateForest
+  [176, 160, 80], // Savanna
+  [214, 196, 138], // Desert
+  [30, 96, 54], // Rainforest
+  [78, 138, 128], // Wetland
+];
+
+/** Colors the map by biome. */
+function paintBiome(state: WorldState, rgba: Uint8ClampedArray): void {
+  const { biome } = state;
+  for (let i = 0; i < biome.length; i++) {
+    put(rgba, i, BIOME_COLORS[biome[i]!] ?? BIOME_COLORS[Biome.Barren]!);
+  }
+}
+
 export const surfaceMapMode: MapMode = {
   id: 'surface',
   label: 'Surface',
   paint: paintSurface,
+};
+
+export const biomeMapMode: MapMode = {
+  id: 'biome',
+  label: 'Biomes',
+  paint: paintBiome,
 };
 
 export const rainfallMapMode: MapMode = {
@@ -209,6 +238,7 @@ export const MAP_MODES: readonly MapMode[] = [
   rainfallMapMode,
   windMapMode,
   currentMapMode,
+  biomeMapMode,
 ];
 
 export { SurfaceType };
