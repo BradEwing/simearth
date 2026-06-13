@@ -98,11 +98,10 @@ Goal: shippable MVP.
     dominates (~60%); removed its per-tile array allocation. Web Worker deferred
     (not needed at the target rate; state is already SoA/transferable if revisited).
 - [x] Onboarding/help overlay; basic responsive layout.
-- [~] Deploy to GitHub Pages; verify the live build end-to-end.
-  - Production build verified end-to-end locally: `npm run build` + `npm run
-    preview` serve correctly with relative asset paths (Pages-ready). CI deploy
-    workflow is in place. **GitHub Actions / Pages deploy on hold** per request
-    (needs a configured remote).
+- [x] Deploy to GitHub Pages; verify the live build end-to-end.
+  - **Live at https://bradewing.github.io/simearth/** (repo BradEwing/simearth).
+    CI lints, tests, builds, and deploys `dist/` to Pages on push to `main`;
+    verified the live site returns 200 and the bundle loads.
 
 ---
 

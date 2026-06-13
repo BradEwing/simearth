@@ -47,5 +47,5 @@ remote is configured.
 
 ## Status
 
-MVP complete (milestones M0–M7 in `docs/TASKS.md`); the live GitHub Pages deploy
-is the one remaining step.
+MVP complete (milestones M0–M7 in `docs/TASKS.md`) and **live at
+<https://bradewing.github.io/simearth/>**.
