@@ -64,7 +64,7 @@ Goal: life that spreads, evolves, and regulates the planet.
 - [x] Life-class model: tolerances, spreading into suitable neighbors, competition, decline.
 - [x] Life map mode; place-life tool.
 - [x] Sentience accumulation + threshold → sentient-species event.
-- [ ] **Integration checkpoint:** biotic regulation measurably outperforms a dead planet (test).
+- [x] **Integration checkpoint:** biotic regulation measurably outperforms a dead planet (test).
 
 ## M5 — Civilization & win condition
 Goal: a complete playable arc ending in Exodus.
