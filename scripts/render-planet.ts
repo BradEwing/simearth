@@ -12,11 +12,14 @@ import { carbonCycleSystem } from '../src/sim/atmosphere/carbon';
 import { initClimate } from '../src/sim/atmosphere/climate';
 import { oceanHeatSystem } from '../src/sim/hydrosphere/oceanHeat';
 import { seaLevelSystem } from '../src/sim/hydrosphere/seaLevel';
+import { weatherSystem } from '../src/sim/atmosphere/weather';
 import {
   surfaceMapMode,
   altitudeMapMode,
   temperatureMapMode,
   currentMapMode,
+  rainfallMapMode,
+  windMapMode,
   type MapMode,
 } from '../src/render/mapModes';
 
@@ -68,6 +71,7 @@ initClimate(state);
 new Simulation(state, [
   temperatureSystem,
   oceanHeatSystem,
+  weatherSystem,
   carbonCycleSystem,
   iceSystem,
   seaLevelSystem,
@@ -84,4 +88,6 @@ renderMode(surfaceMapMode, '/tmp/planet-surface.png');
 renderMode(altitudeMapMode, '/tmp/planet-altitude.png');
 renderMode(temperatureMapMode, '/tmp/planet-temperature.png');
 renderMode(currentMapMode, '/tmp/planet-currents.png');
+renderMode(rainfallMapMode, '/tmp/planet-rainfall.png');
+renderMode(windMapMode, '/tmp/planet-wind.png');
 console.log(`mean temperature: ${state.meanTemperature.toFixed(1)} C`);

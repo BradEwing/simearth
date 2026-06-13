@@ -129,10 +129,58 @@ function paintCurrents(state: WorldState, rgba: Uint8ClampedArray): void {
   }
 }
 
+// Rainfall ramp: arid tan → lush green → wet deep blue.
+const RAIN_DRY: RGB = [196, 170, 110];
+const RAIN_MOIST: RGB = [70, 150, 80];
+const RAIN_WET: RGB = [34, 86, 150];
+
+/** Colors the map by rainfall, normalized to the current maximum. */
+function paintRainfall(state: WorldState, rgba: Uint8ClampedArray): void {
+  const { rainfall } = state;
+  let max = 1e-6;
+  for (let i = 0; i < rainfall.length; i++) if (rainfall[i]! > max) max = rainfall[i]!;
+  for (let i = 0; i < rainfall.length; i++) {
+    const t = rainfall[i]! / max;
+    const c =
+      t < 0.5
+        ? lerpRGB(RAIN_DRY, RAIN_MOIST, t * 2)
+        : lerpRGB(RAIN_MOIST, RAIN_WET, (t - 0.5) * 2);
+    put(rgba, i, c);
+  }
+}
+
+// Wind ramp: westward (easterlies) teal ← calm dark → eastward (westerlies) amber.
+const WIND_WEST: RGB = [60, 180, 180];
+const WIND_CALM: RGB = [20, 24, 34];
+const WIND_EAST: RGB = [220, 170, 70];
+
+/** Colors the map by zonal wind: direction by hue, speed by intensity. */
+function paintWind(state: WorldState, rgba: Uint8ClampedArray): void {
+  const { windU } = state;
+  for (let i = 0; i < windU.length; i++) {
+    const u = Math.max(-1, Math.min(1, windU[i]!));
+    const c =
+      u >= 0 ? lerpRGB(WIND_CALM, WIND_EAST, u) : lerpRGB(WIND_CALM, WIND_WEST, -u);
+    put(rgba, i, c);
+  }
+}
+
 export const surfaceMapMode: MapMode = {
   id: 'surface',
   label: 'Surface',
   paint: paintSurface,
+};
+
+export const rainfallMapMode: MapMode = {
+  id: 'rainfall',
+  label: 'Rainfall',
+  paint: paintRainfall,
+};
+
+export const windMapMode: MapMode = {
+  id: 'wind',
+  label: 'Wind',
+  paint: paintWind,
 };
 
 export const currentMapMode: MapMode = {
@@ -158,6 +206,8 @@ export const MAP_MODES: readonly MapMode[] = [
   surfaceMapMode,
   altitudeMapMode,
   temperatureMapMode,
+  rainfallMapMode,
+  windMapMode,
   currentMapMode,
 ];
 
