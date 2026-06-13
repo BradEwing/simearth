@@ -14,6 +14,7 @@ import { oceanHeatSystem } from '../src/sim/hydrosphere/oceanHeat';
 import { seaLevelSystem } from '../src/sim/hydrosphere/seaLevel';
 import { weatherSystem } from '../src/sim/atmosphere/weather';
 import { biomeSystem } from '../src/sim/biosphere/biome';
+import { lifeSystem } from '../src/sim/biosphere/life';
 import {
   surfaceMapMode,
   altitudeMapMode,
@@ -22,6 +23,7 @@ import {
   rainfallMapMode,
   windMapMode,
   biomeMapMode,
+  lifeMapMode,
   type MapMode,
 } from '../src/render/mapModes';
 
@@ -78,7 +80,8 @@ new Simulation(state, [
   iceSystem,
   seaLevelSystem,
   biomeSystem,
-]).run(800);
+  lifeSystem,
+]).run(3000);
 
 const rgba = new Uint8ClampedArray(state.width * state.height * 4);
 const renderMode = (mode: MapMode, file: string): void => {
@@ -94,4 +97,12 @@ renderMode(currentMapMode, '/tmp/planet-currents.png');
 renderMode(rainfallMapMode, '/tmp/planet-rainfall.png');
 renderMode(windMapMode, '/tmp/planet-wind.png');
 renderMode(biomeMapMode, '/tmp/planet-biome.png');
+renderMode(lifeMapMode, '/tmp/planet-life.png');
+let maxStage = 0;
+let living = 0;
+for (let i = 0; i < state.lifeStage.length; i++) {
+  if (state.lifeStage[i]! > maxStage) maxStage = state.lifeStage[i]!;
+  if (state.biomass[i]! > 0.01) living++;
+}
 console.log(`mean temperature: ${state.meanTemperature.toFixed(1)} C`);
+console.log(`life: max stage ${maxStage}, ${living} living tiles`);

@@ -1,6 +1,7 @@
 import type { WorldState } from '@sim/state';
 import { SurfaceType } from '@sim/geosphere/surface';
 import { Biome } from '@sim/biosphere/biome';
+import { MAX_LIFE_STAGE } from '@sim/biosphere/life';
 import { shadeSurfaceTile } from './palette';
 
 /** An RGB triple in 0–255. */
@@ -188,6 +189,35 @@ function paintBiome(state: WorldState, rgba: Uint8ClampedArray): void {
   }
 }
 
+// Life-class colors by stage (None → ProtoSapient): microbial teal up through
+// vertebrate warmth to a bright sapient magenta.
+const LIFE_NONE: RGB = [16, 20, 28];
+const STAGE_COLORS: readonly RGB[] = [
+  [16, 20, 28], // None
+  [40, 120, 120], // Prokaryote
+  [50, 150, 130], // Eukaryote
+  [70, 170, 90], // Plant
+  [150, 190, 70], // Invertebrate
+  [210, 170, 60], // Vertebrate
+  [220, 110, 70], // Mammal
+  [225, 90, 200], // ProtoSapient
+];
+
+/** Colors the map by life: hue per class, intensity per biomass. */
+function paintLife(state: WorldState, rgba: Uint8ClampedArray): void {
+  const { lifeStage, biomass } = state;
+  for (let i = 0; i < lifeStage.length; i++) {
+    const stage = Math.min(MAX_LIFE_STAGE, lifeStage[i]!);
+    const c = STAGE_COLORS[stage] ?? LIFE_NONE;
+    // Fade from the dark backdrop to the class color by abundance.
+    put(
+      rgba,
+      i,
+      stage === 0 ? LIFE_NONE : lerpRGB(LIFE_NONE, c, Math.min(1, biomass[i]!)),
+    );
+  }
+}
+
 export const surfaceMapMode: MapMode = {
   id: 'surface',
   label: 'Surface',
@@ -198,6 +228,12 @@ export const biomeMapMode: MapMode = {
   id: 'biome',
   label: 'Biomes',
   paint: paintBiome,
+};
+
+export const lifeMapMode: MapMode = {
+  id: 'life',
+  label: 'Life',
+  paint: paintLife,
 };
 
 export const rainfallMapMode: MapMode = {
@@ -239,6 +275,7 @@ export const MAP_MODES: readonly MapMode[] = [
   windMapMode,
   currentMapMode,
   biomeMapMode,
+  lifeMapMode,
 ];
 
 export { SurfaceType };
