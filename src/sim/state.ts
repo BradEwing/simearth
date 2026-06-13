@@ -35,6 +35,10 @@ export interface WorldState {
   o2: number;
   /** Area-weighted mean surface temperature in °C (derived each tick in M3). */
   meanTemperature: number;
+  /** Progress toward sentience (0–1) as proto-sapient life establishes. */
+  sentienceProgress: number;
+  /** Tick a sentient species emerged (−1 if not yet); bridges to civilization. */
+  sentienceEmergedTick: number;
 
   // --- Per-tile fields (length width*height) ---
   /** Geosphere: absolute surface elevation; ocean where `altitude < seaLevel`. */
@@ -101,6 +105,8 @@ export function createWorldState(options: WorldOptions = {}): WorldState {
     co2: 0,
     o2: 0,
     meanTemperature: 0,
+    sentienceProgress: 0,
+    sentienceEmergedTick: -1,
 
     altitude: new Float32Array(n),
     surface: new Uint8Array(n),
