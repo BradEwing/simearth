@@ -7,6 +7,9 @@ import { generateTerrain } from '../src/sim/geosphere/terrain';
 import { classifySurface } from '../src/sim/geosphere/surface';
 import { Simulation } from '../src/sim/simulation';
 import { temperatureSystem } from '../src/sim/atmosphere/temperature';
+import { iceSystem } from '../src/sim/atmosphere/ice';
+import { carbonCycleSystem } from '../src/sim/atmosphere/carbon';
+import { initClimate } from '../src/sim/atmosphere/climate';
 import {
   surfaceMapMode,
   altitudeMapMode,
@@ -58,7 +61,8 @@ function encodePNG(w: number, h: number, rgba: Uint8ClampedArray, scale: number)
 const state = createWorldState({ seed: 'simearth', width: 128, height: 64 });
 generateTerrain(state);
 classifySurface(state);
-new Simulation(state, [temperatureSystem]).tick();
+initClimate(state);
+new Simulation(state, [temperatureSystem, carbonCycleSystem, iceSystem]).run(800);
 
 const rgba = new Uint8ClampedArray(state.width * state.height * 4);
 const renderMode = (mode: MapMode, file: string): void => {

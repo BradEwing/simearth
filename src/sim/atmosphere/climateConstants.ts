@@ -15,8 +15,34 @@ export const OLR_B = 2.17; // W/m² per °C slope
 /** Poleward heat-transport coefficient: tiles relax toward the global mean. */
 export const HEAT_TRANSPORT = 3.8; // W/m² per °C
 
-/** Baseline planetary albedo, until surface/ice albedo replaces it in M3.5. */
+/** Baseline planetary albedo (fallback / pre-classification). */
 export const PLANETARY_ALBEDO = 0.3;
+
+// --- Surface & ice albedo (drives the ice-albedo feedback) ---
+
+/**
+ * Effective planetary albedo per surface type (cloud/atmosphere-inclusive, not
+ * bare-surface), indexed by SurfaceType (Ocean…Ice). Ocean ≈ 0.30 anchors the
+ * Earth-like global energy balance; ice ≈ 0.62 gives the strong contrast that
+ * powers the ice-albedo feedback.
+ */
+export const SURFACE_ALBEDO: readonly number[] = [
+  0.3, // Ocean
+  0.3, // Coast
+  0.33, // Land
+  0.36, // Mountain
+  0.62, // Ice (base type; usually carried by the ice fraction instead)
+];
+
+/** Albedo of fully ice-covered ground/sea — bright, the feedback's engine. */
+export const ICE_ALBEDO = 0.62;
+
+/** Ice begins to form at or below this temperature (°C). */
+export const ICE_FREEZE_TEMP = -1;
+/** Tiles at or below this temperature are fully ice-covered (°C). */
+export const ICE_FULL_TEMP = -8;
+/** Fraction per tick the ice cover relaxes toward its temperature target. */
+export const ICE_RELAX_RATE = 0.1;
 
 /** CO₂ level at which greenhouse forcing is zero (abstract "ppm" units). */
 export const CO2_REFERENCE = 280;

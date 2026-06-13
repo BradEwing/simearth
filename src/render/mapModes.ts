@@ -31,13 +31,15 @@ const put = (rgba: Uint8ClampedArray, i: number, c: RGB): void => {
   rgba[o + 3] = 255;
 };
 
+const ICE_WHITE: RGB = [238, 244, 250];
+
 /**
- * Colors the map by surface classification (ocean/coast/land/mountain/ice),
- * with subtle relief: each tile's color is shaded by its elevation relative to
- * its hemisphere's range, so deep ocean darkens and high land lightens.
+ * Colors the map by surface classification (ocean/coast/land/mountain), with
+ * subtle elevation relief, then blends toward white by each tile's ice cover so
+ * polar caps and glaciation are visible.
  */
 function paintSurface(state: WorldState, rgba: Uint8ClampedArray): void {
-  const { surface, altitude, seaLevel } = state;
+  const { surface, altitude, ice, seaLevel } = state;
   let min = Infinity;
   let max = -Infinity;
   for (let i = 0; i < altitude.length; i++) {
@@ -51,7 +53,8 @@ function paintSurface(state: WorldState, rgba: Uint8ClampedArray): void {
   for (let i = 0; i < surface.length; i++) {
     const a = altitude[i]!;
     const rel = a < seaLevel ? (a - seaLevel) / belowSpan : (a - seaLevel) / aboveSpan;
-    put(rgba, i, shadeSurfaceTile(surface[i] as SurfaceType, rel));
+    const base = shadeSurfaceTile(surface[i] as SurfaceType, rel);
+    put(rgba, i, ice[i]! > 0 ? lerpRGB(base, ICE_WHITE, ice[i]!) : base);
   }
 }
 

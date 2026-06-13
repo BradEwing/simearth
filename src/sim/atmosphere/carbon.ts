@@ -21,14 +21,19 @@ import {
  */
 export const VOLCANIC_OUTGASSING = 2.0;
 
-/** Fraction of tiles that are exposed, weatherable rock (land, not ice/ocean). */
-function landFraction(state: WorldState): number {
-  const { surface } = state;
+/**
+ * Fraction of the planet that is exposed, weatherable rock: land (not ocean),
+ * weighted by how ice-free it is. Ice-covered land doesn't weather, so a
+ * glaciated planet's CO₂ sink shuts down and outgassing rebuilds CO₂ — the
+ * mechanism that escapes a snowball and underpins ice-age hysteresis.
+ */
+function weatherableFraction(state: WorldState): number {
+  const { surface, ice } = state;
   let land = 0;
   for (let i = 0; i < surface.length; i++) {
     const s = surface[i];
     if (s === SurfaceType.Land || s === SurfaceType.Coast || s === SurfaceType.Mountain) {
-      land++;
+      land += 1 - ice[i]!;
     }
   }
   return land / surface.length;
@@ -42,7 +47,7 @@ function landFraction(state: WorldState): number {
  * Life amplifies this in M4.
  */
 export function silicateWeathering(state: WorldState): number {
-  const land = landFraction(state);
+  const land = weatherableFraction(state);
   const tempFactor = Math.exp(
     (state.meanTemperature - WEATHERING_T_REF) / WEATHERING_T_SCALE,
   );

@@ -49,6 +49,8 @@ export interface WorldState {
   /** Hydrosphere: ocean current vector components (heat transport). */
   currentU: Float32Array;
   currentV: Float32Array;
+  /** Cryosphere: ice cover fraction per tile (0–1), driven by temperature. */
+  ice: Float32Array;
   /** Biosphere: Biome enum per land tile. */
   biome: Uint8Array;
   /** Civilization: pollution level (feeds back into climate). */
@@ -101,6 +103,7 @@ export function createWorldState(options: WorldOptions = {}): WorldState {
     windV: new Float32Array(n),
     currentU: new Float32Array(n),
     currentV: new Float32Array(n),
+    ice: new Float32Array(n),
     biome: new Uint8Array(n),
     pollution: new Float32Array(n),
   };
