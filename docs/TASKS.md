@@ -48,7 +48,7 @@ Goal: a planet with a regulating climate.
 - [x] Latitude insolation + base temperature field; temperature map mode.
 - [x] Greenhouse: CO₂ scalar → temperature forcing; volcanic/respiration sources.
 - [x] Rising solar luminosity over ticks (stellar evolution).
-- [ ] Carbonate–silicate weathering: temperature-dependent CO₂ drawdown (negative feedback).
+- [x] Carbonate–silicate weathering: temperature-dependent CO₂ drawdown (negative feedback).
 - [ ] Albedo from ice/surface → feedback; ice-age hysteresis.
 - [ ] Hydrosphere: sea level driven by global ice budget; coastline updates.
 - [ ] Ocean currents vector field + heat advection; current map mode.

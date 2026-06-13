@@ -23,3 +23,17 @@ export const CO2_REFERENCE = 280;
 
 /** CO₂ radiative forcing coefficient: ΔF = k · ln(CO₂ / CO₂_ref), W/m². */
 export const CO2_FORCING_COEF = 5.35;
+
+// --- Silicate weathering thermostat (the Gaia negative feedback) ---
+
+/** Temperature at which weathering equals outgassing on a reference planet. */
+export const WEATHERING_T_REF = 15; // °C
+
+/** Weathering e-folds per this temperature rise (Arrhenius-like sensitivity). */
+export const WEATHERING_T_SCALE = 12.5; // °C
+
+/** Land fraction the weathering rate is calibrated against. */
+export const LAND_REFERENCE = 0.3;
+
+/** CO₂ is never drawn below this (a trace floor) to avoid log/zero issues. */
+export const CO2_FLOOR = 0.01;
