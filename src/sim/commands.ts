@@ -73,6 +73,62 @@ export function terraform(
   classifySurface(state);
 }
 
+/** Geologic event tuning. */
+export const VOLCANO_RADIUS = 2;
+export const VOLCANO_RAISE = 0.5;
+export const VOLCANO_CO2 = 20;
+export const METEOR_RADIUS = 3;
+export const METEOR_DEPTH = 0.6;
+export const QUAKE_RADIUS = 3;
+export const QUAKE_AMOUNT = 0.15;
+
+/** Deterministic per-index value in [-0.5, 0.5] (no RNG in command context). */
+const hashNoise = (i: number): number => {
+  let h = Math.imul(i ^ 0x9e3779b9, 2654435761);
+  h ^= h >>> 15;
+  return (h >>> 0) / 4294967296 - 0.5;
+};
+
+/**
+ * Erupts a volcano: builds a peak (raising terrain toward the center), vents CO₂
+ * into the atmosphere, and buries nearby life under ash. Re-derives the surface.
+ */
+export function triggerVolcano(state: WorldState, x: number, y: number): void {
+  forEachInRadius(state, x, y, VOLCANO_RADIUS, (i, falloff) => {
+    state.altitude[i]! += VOLCANO_RAISE * (1 - falloff);
+    state.biomass[i] = 0;
+    state.lifeStage[i] = 0;
+  });
+  state.co2 += VOLCANO_CO2;
+  classifySurface(state);
+}
+
+/**
+ * Strikes a meteor: gouges a crater (lowering terrain toward the center) and
+ * annihilates life and settlements in the blast radius. Re-derives the surface.
+ */
+export function triggerMeteor(state: WorldState, x: number, y: number): void {
+  forEachInRadius(state, x, y, METEOR_RADIUS, (i, falloff) => {
+    state.altitude[i]! -= METEOR_DEPTH * (1 - falloff);
+    state.biomass[i] = 0;
+    state.lifeStage[i] = 0;
+    state.population[i] = 0;
+  });
+  classifySurface(state);
+}
+
+/**
+ * Triggers an earthquake: jolts terrain with a deterministic perturbation and
+ * topples settlements (halving population) in the radius. Re-derives the surface.
+ */
+export function triggerEarthquake(state: WorldState, x: number, y: number): void {
+  forEachInRadius(state, x, y, QUAKE_RADIUS, (i, falloff) => {
+    state.altitude[i]! += QUAKE_AMOUNT * hashNoise(i) * (1 - falloff);
+    state.population[i]! *= 0.5;
+  });
+  classifySurface(state);
+}
+
 /** Depth/height water tools push tiles below/above sea level. */
 export const WATER_OFFSET = 0.12;
 

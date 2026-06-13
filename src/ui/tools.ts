@@ -1,5 +1,13 @@
 import type { WorldState } from '@sim/state';
-import { placeLife, terraform, setWater, TERRAFORM_AMOUNT } from '@sim/commands';
+import {
+  placeLife,
+  terraform,
+  setWater,
+  triggerVolcano,
+  triggerMeteor,
+  triggerEarthquake,
+  TERRAFORM_AMOUNT,
+} from '@sim/commands';
 import { LifeClass } from '@sim/biosphere/life';
 
 /**
@@ -44,6 +52,24 @@ export const seedLifeTool: Tool = {
   apply: (state, x, y) => placeLife(state, x, y, LifeClass.Prokaryote),
 };
 
+export const volcanoTool: Tool = {
+  id: 'volcano',
+  label: 'Volcano',
+  apply: triggerVolcano,
+};
+
+export const meteorTool: Tool = {
+  id: 'meteor',
+  label: 'Meteor',
+  apply: triggerMeteor,
+};
+
+export const earthquakeTool: Tool = {
+  id: 'earthquake',
+  label: 'Earthquake',
+  apply: triggerEarthquake,
+};
+
 /** All registered tools, in palette order. */
 export const TOOLS: readonly Tool[] = [
   raiseTerrainTool,
@@ -51,4 +77,7 @@ export const TOOLS: readonly Tool[] = [
   addWaterTool,
   removeWaterTool,
   seedLifeTool,
+  volcanoTool,
+  meteorTool,
+  earthquakeTool,
 ];
