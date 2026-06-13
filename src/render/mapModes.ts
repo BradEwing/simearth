@@ -116,10 +116,29 @@ function paintTemperature(state: WorldState, rgba: Uint8ClampedArray): void {
   }
 }
 
+// Ocean-current ramp: still/land dark → fast current bright cyan.
+const CURRENT_DARK: RGB = [10, 16, 28];
+const CURRENT_BRIGHT: RGB = [90, 220, 235];
+
+/** Colors ocean tiles by current speed; land stays dark. */
+function paintCurrents(state: WorldState, rgba: Uint8ClampedArray): void {
+  const { currentU, currentV } = state;
+  for (let i = 0; i < currentU.length; i++) {
+    const speed = Math.min(1, Math.hypot(currentU[i]!, currentV[i]!));
+    put(rgba, i, lerpRGB(CURRENT_DARK, CURRENT_BRIGHT, speed));
+  }
+}
+
 export const surfaceMapMode: MapMode = {
   id: 'surface',
   label: 'Surface',
   paint: paintSurface,
+};
+
+export const currentMapMode: MapMode = {
+  id: 'currents',
+  label: 'Ocean Currents',
+  paint: paintCurrents,
 };
 
 export const temperatureMapMode: MapMode = {
@@ -139,6 +158,7 @@ export const MAP_MODES: readonly MapMode[] = [
   surfaceMapMode,
   altitudeMapMode,
   temperatureMapMode,
+  currentMapMode,
 ];
 
 export { SurfaceType };

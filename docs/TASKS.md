@@ -51,7 +51,7 @@ Goal: a planet with a regulating climate.
 - [x] Carbonate–silicate weathering: temperature-dependent CO₂ drawdown (negative feedback).
 - [x] Albedo from ice/surface → feedback; ice-age hysteresis.
 - [x] Hydrosphere: sea level driven by global ice budget; coastline updates.
-- [ ] Ocean currents vector field + heat advection; current map mode.
+- [x] Ocean currents vector field + heat advection; current map mode.
 - [ ] Wind bands + rainfall (orographic + rain shadow); rainfall/wind map modes.
 - [ ] Erosion driven by rainfall/slope feeding back into geosphere.
 - [ ] **Integration checkpoint:** verify emergent regulation holds mean temp habitable as the sun brightens (headless test over many ticks).

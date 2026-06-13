@@ -10,10 +10,13 @@ import { temperatureSystem } from '../src/sim/atmosphere/temperature';
 import { iceSystem } from '../src/sim/atmosphere/ice';
 import { carbonCycleSystem } from '../src/sim/atmosphere/carbon';
 import { initClimate } from '../src/sim/atmosphere/climate';
+import { oceanHeatSystem } from '../src/sim/hydrosphere/oceanHeat';
+import { seaLevelSystem } from '../src/sim/hydrosphere/seaLevel';
 import {
   surfaceMapMode,
   altitudeMapMode,
   temperatureMapMode,
+  currentMapMode,
   type MapMode,
 } from '../src/render/mapModes';
 
@@ -62,7 +65,13 @@ const state = createWorldState({ seed: 'simearth', width: 128, height: 64 });
 generateTerrain(state);
 classifySurface(state);
 initClimate(state);
-new Simulation(state, [temperatureSystem, carbonCycleSystem, iceSystem]).run(800);
+new Simulation(state, [
+  temperatureSystem,
+  oceanHeatSystem,
+  carbonCycleSystem,
+  iceSystem,
+  seaLevelSystem,
+]).run(800);
 
 const rgba = new Uint8ClampedArray(state.width * state.height * 4);
 const renderMode = (mode: MapMode, file: string): void => {
@@ -74,4 +83,5 @@ const renderMode = (mode: MapMode, file: string): void => {
 renderMode(surfaceMapMode, '/tmp/planet-surface.png');
 renderMode(altitudeMapMode, '/tmp/planet-altitude.png');
 renderMode(temperatureMapMode, '/tmp/planet-temperature.png');
+renderMode(currentMapMode, '/tmp/planet-currents.png');
 console.log(`mean temperature: ${state.meanTemperature.toFixed(1)} C`);
