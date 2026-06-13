@@ -56,6 +56,29 @@ body {
   flex: 1;
 }
 
+.se-speed {
+  display: inline-flex;
+  gap: 2px;
+}
+
+.se-speed__btn {
+  min-width: 2.4rem;
+  padding: 0.25rem 0.4rem;
+  font: inherit;
+  font-size: 0.75rem;
+  color: var(--se-text-dim);
+  background: var(--se-bg);
+  border: 1px solid var(--se-panel-edge);
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.se-speed__btn.is-active {
+  color: var(--se-bg);
+  background: var(--se-accent);
+  border-color: var(--se-accent);
+}
+
 .se-stage {
   grid-area: stage;
   position: relative;

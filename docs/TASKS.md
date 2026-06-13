@@ -84,7 +84,7 @@ Goal: the player can shape and read the world like the original.
 - [ ] Map-mode switcher UI for all overlays.
 - [ ] Gaia/model panel: live planetary read-outs (temp, CO₂/O₂, sea level, biomass, pop, solar, era).
 - [ ] Adjustable model parameter(s) (e.g., greenhouse strength) for experimentation.
-- [ ] Speed control (pause/slow/normal/fast).
+- [x] Speed control (pause/slow/normal/fast).
 
 ## M7 — Persistence, polish, ship
 Goal: shippable MVP.
