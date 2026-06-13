@@ -79,7 +79,7 @@ Goal: a complete playable arc ending in Exodus.
 Goal: the player can shape and read the world like the original.
 
 - [x] Tool framework + action/command interface into sim (no direct mutation from UI).
-- [ ] Terraform (raise/lower), water add/remove tools.
+- [x] Terraform (raise/lower), water add/remove tools.
 - [ ] Event tools: volcano, meteor, earthquake.
 - [x] Map-mode switcher UI for all overlays.
 - [x] Gaia/model panel: live planetary read-outs (temp, CO₂/O₂, sea level, biomass, pop, solar, era).

@@ -1,5 +1,5 @@
 import type { WorldState } from '@sim/state';
-import { placeLife } from '@sim/commands';
+import { placeLife, terraform, setWater, TERRAFORM_AMOUNT } from '@sim/commands';
 import { LifeClass } from '@sim/biosphere/life';
 
 /**
@@ -14,6 +14,30 @@ export interface Tool {
   apply(state: WorldState, x: number, y: number): void;
 }
 
+export const raiseTerrainTool: Tool = {
+  id: 'raise',
+  label: 'Raise Land',
+  apply: (state, x, y) => terraform(state, x, y, TERRAFORM_AMOUNT),
+};
+
+export const lowerTerrainTool: Tool = {
+  id: 'lower',
+  label: 'Lower Land',
+  apply: (state, x, y) => terraform(state, x, y, -TERRAFORM_AMOUNT),
+};
+
+export const addWaterTool: Tool = {
+  id: 'add-water',
+  label: 'Add Water',
+  apply: (state, x, y) => setWater(state, x, y, true),
+};
+
+export const removeWaterTool: Tool = {
+  id: 'remove-water',
+  label: 'Remove Water',
+  apply: (state, x, y) => setWater(state, x, y, false),
+};
+
 export const seedLifeTool: Tool = {
   id: 'seed-life',
   label: 'Seed Life',
@@ -21,4 +45,10 @@ export const seedLifeTool: Tool = {
 };
 
 /** All registered tools, in palette order. */
-export const TOOLS: readonly Tool[] = [seedLifeTool];
+export const TOOLS: readonly Tool[] = [
+  raiseTerrainTool,
+  lowerTerrainTool,
+  addWaterTool,
+  removeWaterTool,
+  seedLifeTool,
+];

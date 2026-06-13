@@ -1,6 +1,7 @@
 import type { WorldState } from './state';
 import { wrapX, clampY } from './grid';
 import { LifeClass } from './biosphere/life';
+import { classifySurface } from './geosphere/surface';
 
 /**
  * Player/UI commands that mutate simulation state through an explicit interface
@@ -48,4 +49,48 @@ export function placeLife(
   const i = clampY(state.height, y) * state.width + wrapX(state.width, x);
   state.lifeStage[i] = stage;
   state.biomass[i] = biomass;
+}
+
+/** Default terraform brush radius and per-click elevation change. */
+export const TERRAFORM_RADIUS = 2;
+export const TERRAFORM_AMOUNT = 0.15;
+
+/**
+ * Raises (delta > 0) or lowers (delta < 0) terrain within the brush, strongest
+ * at the center and tapering to the edge, then re-derives the coastline so the
+ * change shows immediately.
+ */
+export function terraform(
+  state: WorldState,
+  x: number,
+  y: number,
+  delta: number,
+  radius = TERRAFORM_RADIUS,
+): void {
+  forEachInRadius(state, x, y, radius, (i, falloff) => {
+    state.altitude[i]! += delta * (1 - falloff);
+  });
+  classifySurface(state);
+}
+
+/** Depth/height water tools push tiles below/above sea level. */
+export const WATER_OFFSET = 0.12;
+
+/**
+ * Floods (`makeOcean`) or reclaims land within the brush by pushing altitude
+ * below or above sea level, then re-derives the coastline.
+ */
+export function setWater(
+  state: WorldState,
+  x: number,
+  y: number,
+  makeOcean: boolean,
+  radius = TERRAFORM_RADIUS,
+): void {
+  forEachInRadius(state, x, y, radius, (i) => {
+    state.altitude[i] = makeOcean
+      ? Math.min(state.altitude[i]!, state.seaLevel - WATER_OFFSET)
+      : Math.max(state.altitude[i]!, state.seaLevel + WATER_OFFSET);
+  });
+  classifySurface(state);
 }
