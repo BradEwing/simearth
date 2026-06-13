@@ -29,7 +29,7 @@ export const oceanHeatSystem: System = {
 
     const isOcean = (i: number): boolean => surface[i] === SurfaceType.Ocean;
     let src = Float32Array.from(temperature);
-    let dst = Float32Array.from(temperature);
+    let dst = new Float32Array(temperature.length); // fully overwritten each substep
 
     for (let step = 0; step < OCEAN_ADVECT_SUBSTEPS; step++) {
       for (let y = 0; y < height; y++) {
@@ -58,13 +58,24 @@ export const oceanHeatSystem: System = {
           const dTdy = v > 0 ? here - upN : upS - here;
 
           // Diffusion toward the mean of ocean neighbors (no-flux at land).
+          // Neighbors checked inline (no per-tile array) — this is the hot path.
           let sum = 0;
           let n = 0;
-          for (const j of [iw, ie, iN, iS]) {
-            if (j >= 0 && j < width * height && isOcean(j)) {
-              sum += src[j]!;
-              n++;
-            }
+          if (isOcean(iw)) {
+            sum += src[iw]!;
+            n++;
+          }
+          if (isOcean(ie)) {
+            sum += src[ie]!;
+            n++;
+          }
+          if (y > 0 && isOcean(iN)) {
+            sum += src[iN]!;
+            n++;
+          }
+          if (y < height - 1 && isOcean(iS)) {
+            sum += src[iS]!;
+            n++;
           }
           const diffuse = n > 0 ? (sum / n - here) * OCEAN_DIFFUSE : 0;
 

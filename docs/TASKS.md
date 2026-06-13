@@ -92,7 +92,11 @@ Goal: shippable MVP.
 - [x] Save/load UI to IndexedDB; multiple named saves.
 - [x] Export/import planet to file.
 - [x] New-game flow: seed entry / randomize; starting conditions.
-- [ ] Performance pass at default grid; (optional) move sim into a Web Worker.
+- [x] Performance pass at default grid; (optional) move sim into a Web Worker.
+  - Measured ~7.2 ms/tick (~139 ticks/s) at 128×64 with the full stack — above
+    the fast speed (100 t/s), so it's playable with headroom. Ocean-heat
+    dominates (~60%); removed its per-tile array allocation. Web Worker deferred
+    (not needed at the target rate; state is already SoA/transferable if revisited).
 - [ ] Onboarding/help overlay; basic responsive layout.
 - [ ] Deploy to GitHub Pages; verify the live build end-to-end.
 
