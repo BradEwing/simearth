@@ -23,8 +23,10 @@ export interface WorldState {
   rng: RngState;
 
   // --- Global scalars (planet-wide) ---
-  /** Sea level as an altitude threshold; tiles below are ocean. */
+  /** Sea level as an altitude threshold; tiles below are ocean. Moves with ice. */
   seaLevel: number;
+  /** Ice-free reference sea level (set at generation); `seaLevel` drifts from it. */
+  seaLevelBase: number;
   /** Stellar output relative to present-day Sun (1.0). Rises over deep time. */
   solarLuminosity: number;
   /** Atmospheric CO2 (abstract units; drives the greenhouse in M3). */
@@ -90,6 +92,7 @@ export function createWorldState(options: WorldOptions = {}): WorldState {
     rng: seedRng(seed),
 
     seaLevel: 0,
+    seaLevelBase: 0,
     solarLuminosity: 1,
     co2: 0,
     o2: 0,

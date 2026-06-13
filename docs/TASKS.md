@@ -50,7 +50,7 @@ Goal: a planet with a regulating climate.
 - [x] Rising solar luminosity over ticks (stellar evolution).
 - [x] Carbonate–silicate weathering: temperature-dependent CO₂ drawdown (negative feedback).
 - [x] Albedo from ice/surface → feedback; ice-age hysteresis.
-- [ ] Hydrosphere: sea level driven by global ice budget; coastline updates.
+- [x] Hydrosphere: sea level driven by global ice budget; coastline updates.
 - [ ] Ocean currents vector field + heat advection; current map mode.
 - [ ] Wind bands + rainfall (orographic + rain shadow); rainfall/wind map modes.
 - [ ] Erosion driven by rainfall/slope feeding back into geosphere.

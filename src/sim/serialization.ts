@@ -29,6 +29,7 @@ export interface SerializedWorld {
   rng: RngState;
   scalars: {
     seaLevel: number;
+    seaLevelBase: number;
     solarLuminosity: number;
     co2: number;
     o2: number;
@@ -91,6 +92,7 @@ export function serializeWorld(state: WorldState): SerializedWorld {
     rng: { ...state.rng },
     scalars: {
       seaLevel: state.seaLevel,
+      seaLevelBase: state.seaLevelBase,
       solarLuminosity: state.solarLuminosity,
       co2: state.co2,
       o2: state.o2,
@@ -120,6 +122,7 @@ export function deserializeWorld(data: SerializedWorld): WorldState {
   state.rng = { ...data.rng };
 
   state.seaLevel = data.scalars.seaLevel;
+  state.seaLevelBase = data.scalars.seaLevelBase;
   state.solarLuminosity = data.scalars.solarLuminosity;
   state.co2 = data.scalars.co2;
   state.o2 = data.scalars.o2;

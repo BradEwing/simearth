@@ -54,4 +54,5 @@ export function generateTerrain(state: WorldState, options: TerrainOptions = {})
   }
 
   state.seaLevel = quantile(altitude, oceanFraction);
+  state.seaLevelBase = state.seaLevel; // ice-free reference for the hydrosphere
 }
