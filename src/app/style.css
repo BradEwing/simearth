@@ -101,6 +101,24 @@ body {
   overflow-y: auto;
 }
 
+/* Narrow screens: stack the panel beneath the map instead of beside it. */
+@media (max-width: 640px) {
+  .se-shell {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr auto;
+    grid-template-areas:
+      'topbar'
+      'stage'
+      'panel';
+  }
+
+  .se-panel {
+    border-left: none;
+    border-top: 1px solid var(--se-panel-edge);
+    max-height: 40vh;
+  }
+}
+
 .se-panel h2 {
   margin: 0 0 0.5rem;
   font-size: 0.75rem;
@@ -268,7 +286,8 @@ body {
   border-color: var(--se-accent);
 }
 
-.se-victory {
+.se-victory,
+.se-help {
   position: fixed;
   inset: 0;
   display: flex;
@@ -278,8 +297,61 @@ body {
   z-index: 100;
 }
 
-.se-victory[hidden] {
+.se-victory[hidden],
+.se-help[hidden] {
   display: none;
+}
+
+.se-help__card {
+  max-width: 30rem;
+  max-height: 86vh;
+  overflow-y: auto;
+  padding: 1.6rem 1.8rem;
+  background: var(--se-panel);
+  border: 1px solid var(--se-panel-edge);
+  border-radius: 8px;
+}
+
+.se-help__card h1 {
+  margin: 0 0 0.8rem;
+  color: var(--se-accent);
+  letter-spacing: 0.06em;
+}
+
+.se-help__card h3 {
+  margin: 0.9rem 0 0.2rem;
+  font-size: 0.82rem;
+  color: var(--se-accent-warm);
+}
+
+.se-help__card p {
+  margin: 0;
+  font-size: 0.82rem;
+  line-height: 1.45;
+  color: var(--se-text);
+}
+
+.se-help__dismiss {
+  margin-top: 1.4rem;
+  padding: 0.5rem 1.2rem;
+  font: inherit;
+  color: var(--se-bg);
+  background: var(--se-accent);
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.se-help__open {
+  width: 1.8rem;
+  height: 1.8rem;
+  font: inherit;
+  font-weight: 700;
+  color: var(--se-text-dim);
+  background: var(--se-bg);
+  border: 1px solid var(--se-panel-edge);
+  border-radius: 50%;
+  cursor: pointer;
 }
 
 .se-victory__card {

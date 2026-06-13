@@ -19,6 +19,7 @@ import { createGaiaPanel } from '@ui/gaiaPanel';
 import { createModelParams } from '@ui/modelParams';
 import { createSaveLoadPanel } from '@ui/saveLoadPanel';
 import { createNewGamePanel } from '@ui/newGamePanel';
+import { createHelpOverlay } from '@ui/helpOverlay';
 import { TOOLS } from '@ui/tools';
 import { createToolPalette } from '@ui/toolPalette';
 import { attachToolInput } from '@ui/toolInput';
@@ -42,6 +43,16 @@ renderer.update(state, activeMapMode);
 const { surface } = attachCanvasSurface(shell.canvas);
 attachCameraControls(shell.canvas, camera);
 shell.topbar.append(createSpeedControl(clock));
+
+// Help / onboarding overlay, shown once on first load, reopenable via "?".
+const help = createHelpOverlay(root);
+const helpBtn = document.createElement('button');
+helpBtn.className = 'se-help__open';
+helpBtn.textContent = '?';
+helpBtn.title = 'Help';
+helpBtn.addEventListener('click', () => help.toggle());
+shell.topbar.append(helpBtn);
+help.show();
 
 // Side panel: map-mode switcher (Gaia read-outs added in M6.5).
 const mapSection = document.createElement('section');

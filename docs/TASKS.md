@@ -97,7 +97,7 @@ Goal: shippable MVP.
     the fast speed (100 t/s), so it's playable with headroom. Ocean-heat
     dominates (~60%); removed its per-tile array allocation. Web Worker deferred
     (not needed at the target rate; state is already SoA/transferable if revisited).
-- [ ] Onboarding/help overlay; basic responsive layout.
+- [x] Onboarding/help overlay; basic responsive layout.
 - [ ] Deploy to GitHub Pages; verify the live build end-to-end.
 
 ---
