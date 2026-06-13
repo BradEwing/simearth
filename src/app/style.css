@@ -90,3 +90,49 @@ body {
   color: var(--se-text-dim);
   font-size: 0.8rem;
 }
+
+.se-victory {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(5, 8, 14, 0.78);
+  z-index: 100;
+}
+
+.se-victory[hidden] {
+  display: none;
+}
+
+.se-victory__card {
+  max-width: 32rem;
+  padding: 2rem 2.4rem;
+  text-align: center;
+  background: var(--se-panel);
+  border: 1px solid var(--se-accent);
+  border-radius: 8px;
+  box-shadow: 0 0 40px rgba(76, 194, 255, 0.25);
+}
+
+.se-victory__card h1 {
+  margin: 0 0 1rem;
+  color: var(--se-accent);
+  letter-spacing: 0.06em;
+}
+
+.se-victory__card p {
+  color: var(--se-text);
+  line-height: 1.5;
+}
+
+.se-victory__dismiss {
+  margin-top: 1.4rem;
+  padding: 0.5rem 1rem;
+  font: inherit;
+  color: var(--se-bg);
+  background: var(--se-accent);
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}

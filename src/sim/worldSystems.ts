@@ -3,6 +3,7 @@ import { CLIMATE_SYSTEMS } from './climateSystems';
 import { biomeSystem } from './biosphere/biome';
 import { lifeSystem } from './biosphere/life';
 import { sentienceSystem } from './biosphere/sentience';
+import { civilizationSystem } from './civilization/civilization';
 
 /**
  * Biosphere systems (M4), ordered after climate: biomes (need temperature +
@@ -15,10 +16,11 @@ export const BIOSPHERE_SYSTEMS: readonly System[] = [
 ];
 
 /**
- * The full ordered world update: geophysics/climate then biosphere. The
- * civilization stage (M5) appends to this; the app (M6) runs it each tick.
+ * The full ordered world update: climate → biosphere → civilization (which the
+ * sentience system gates on). The app (M6) runs this list each tick.
  */
 export const WORLD_SYSTEMS: readonly System[] = [
   ...CLIMATE_SYSTEMS,
   ...BIOSPHERE_SYSTEMS,
+  civilizationSystem,
 ];

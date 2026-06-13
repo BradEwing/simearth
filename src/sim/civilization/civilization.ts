@@ -35,6 +35,14 @@ const TECH_MIN_POP = 0.2;
 export const CO2_EMISSION_PER_POLLUTION = 3.0;
 
 /**
+ * Total population a civilization must sustain to launch the Exodus. Reaching
+ * the Exodus tech tier is the real achievement (it requires sustained
+ * population to research); this floor just confirms a living civilization, not
+ * a collapsed remnant.
+ */
+export const EXODUS_MIN_POP = 5;
+
+/**
  * Pollution intensity per unit population by tech era: negligible before the
  * Industrial Age (tech 2), rising to a peak around the Information Age (tech 4),
  * then falling as clean nanotech (tech 6) arrives. The classic industrial hump.
@@ -178,5 +186,10 @@ export const civilizationSystem: System = {
     }
     const meanPollution = totalPollution / pollution.length;
     state.co2 += meanPollution * CO2_EMISSION_PER_POLLUTION * dt;
+
+    // Exodus (win): the Exodus tech tier reached by a living civilization.
+    if (state.exodusTick < 0 && state.techLevel >= MAX_TECH && pop >= EXODUS_MIN_POP) {
+      state.exodusTick = state.tick;
+    }
   },
 };

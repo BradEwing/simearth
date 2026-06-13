@@ -73,7 +73,7 @@ Goal: a complete playable arc ending in Exodus.
 - [x] Tech progression (condensed eras) raising population ceilings.
 - [x] Pollution from tech/population feeding CO₂/pollution fields (climate feedback).
 - [x] Pollution map mode; population/city rendering.
-- [ ] Exodus win condition + victory screen.
+- [x] Exodus win condition + victory screen.
 
 ## M6 — Player tools & model panels
 Goal: the player can shape and read the world like the original.

@@ -5,7 +5,11 @@ import { generateTerrain } from './geosphere/terrain';
 import { classifySurface } from './geosphere/surface';
 import { initClimate } from './atmosphere/climate';
 import { CLIMATE_SYSTEMS } from './climateSystems';
-import { WORLD_SYSTEMS } from './worldSystems';
+import { BIOSPHERE_SYSTEMS } from './worldSystems';
+
+// The biotic (life) effect in isolation — climate + biosphere, no civilization,
+// so settlement pollution can't confound the comparison.
+const LIVING_SYSTEMS = [...CLIMATE_SYSTEMS, ...BIOSPHERE_SYSTEMS];
 
 /**
  * M4 integration checkpoint — biotic regulation.
@@ -30,7 +34,7 @@ describe('biotic regulation (integration)', () => {
     const alive = freshPlanet('biotic');
     const dead = freshPlanet('biotic');
 
-    new Simulation(alive, WORLD_SYSTEMS).run(5000);
+    new Simulation(alive, LIVING_SYSTEMS).run(5000);
     new Simulation(dead, CLIMATE_SYSTEMS).run(5000); // no biosphere ⇒ biomass stays 0
 
     // Life took hold on the living planet; the dead one stayed barren.

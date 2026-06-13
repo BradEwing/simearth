@@ -6,15 +6,9 @@ import { createWorldState } from '../src/sim/state';
 import { generateTerrain } from '../src/sim/geosphere/terrain';
 import { classifySurface } from '../src/sim/geosphere/surface';
 import { Simulation } from '../src/sim/simulation';
-import { temperatureSystem } from '../src/sim/atmosphere/temperature';
-import { iceSystem } from '../src/sim/atmosphere/ice';
-import { carbonCycleSystem } from '../src/sim/atmosphere/carbon';
 import { initClimate } from '../src/sim/atmosphere/climate';
-import { oceanHeatSystem } from '../src/sim/hydrosphere/oceanHeat';
-import { seaLevelSystem } from '../src/sim/hydrosphere/seaLevel';
-import { weatherSystem } from '../src/sim/atmosphere/weather';
-import { biomeSystem } from '../src/sim/biosphere/biome';
-import { lifeSystem } from '../src/sim/biosphere/life';
+import { WORLD_SYSTEMS } from '../src/sim/worldSystems';
+import { eraName, totalPopulation } from '../src/sim/civilization/civilization';
 import {
   surfaceMapMode,
   altitudeMapMode,
@@ -24,6 +18,8 @@ import {
   windMapMode,
   biomeMapMode,
   lifeMapMode,
+  populationMapMode,
+  pollutionMapMode,
   type MapMode,
 } from '../src/render/mapModes';
 
@@ -68,25 +64,20 @@ function encodePNG(w: number, h: number, rgba: Uint8ClampedArray, scale: number)
   ]);
 }
 
-const state = createWorldState({ seed: 'simearth', width: 128, height: 64 });
+const state = createWorldState({ seed: 'simearth', width: 96, height: 48 });
 generateTerrain(state);
 classifySurface(state);
 initClimate(state);
-new Simulation(state, [
-  temperatureSystem,
-  oceanHeatSystem,
-  weatherSystem,
-  carbonCycleSystem,
-  iceSystem,
-  seaLevelSystem,
-  biomeSystem,
-  lifeSystem,
-]).run(3000);
+
+// Run the full arc: climate → life → sentience → civilization → Exodus.
+const sim = new Simulation(state, WORLD_SYSTEMS);
+const TICKS = 12000;
+for (let t = 0; t < TICKS && state.exodusTick < 0; t++) sim.tick();
 
 const rgba = new Uint8ClampedArray(state.width * state.height * 4);
 const renderMode = (mode: MapMode, file: string): void => {
   mode.paint(state, rgba);
-  writeFileSync(file, encodePNG(state.width, state.height, rgba, 6));
+  writeFileSync(file, encodePNG(state.width, state.height, rgba, 8));
   console.log(`wrote ${file}`);
 };
 
@@ -98,11 +89,22 @@ renderMode(rainfallMapMode, '/tmp/planet-rainfall.png');
 renderMode(windMapMode, '/tmp/planet-wind.png');
 renderMode(biomeMapMode, '/tmp/planet-biome.png');
 renderMode(lifeMapMode, '/tmp/planet-life.png');
+renderMode(populationMapMode, '/tmp/planet-population.png');
+renderMode(pollutionMapMode, '/tmp/planet-pollution.png');
+
 let maxStage = 0;
-let living = 0;
 for (let i = 0; i < state.lifeStage.length; i++) {
   if (state.lifeStage[i]! > maxStage) maxStage = state.lifeStage[i]!;
-  if (state.biomass[i]! > 0.01) living++;
 }
-console.log(`mean temperature: ${state.meanTemperature.toFixed(1)} C`);
-console.log(`life: max stage ${maxStage}, ${living} living tiles`);
+console.log('--- planetary history ---');
+console.log(`ticks run: ${state.tick}`);
+console.log(
+  `mean temperature: ${state.meanTemperature.toFixed(1)} C, CO2 ${state.co2.toFixed(1)}`,
+);
+console.log(`life: max stage ${maxStage}`);
+console.log(`sentience emerged: ${state.sentienceEmergedTick}`);
+console.log(`tech: ${state.techLevel.toFixed(2)} (${eraName(state.techLevel)})`);
+console.log(`population: ${totalPopulation(state).toFixed(1)}`);
+console.log(
+  `exodus: ${state.exodusTick >= 0 ? `WON at tick ${state.exodusTick}` : 'not yet'}`,
+);
