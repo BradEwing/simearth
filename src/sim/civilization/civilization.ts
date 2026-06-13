@@ -8,6 +8,29 @@ export const MAX_TECH = 6;
 /** Each tech level raises the population ceiling by this fraction. */
 export const TECH_POP_BONUS = 0.35;
 
+/** Condensed tech eras, indexed by floor(techLevel). */
+export const ERA_NAMES = [
+  'Stone Age',
+  'Bronze Age',
+  'Iron Age',
+  'Industrial Age',
+  'Information Age',
+  'Nanotech Age',
+  'Exodus',
+] as const;
+
+/** Human-readable era for a tech level. */
+export function eraName(techLevel: number): string {
+  return ERA_NAMES[Math.min(ERA_NAMES.length - 1, Math.max(0, Math.floor(techLevel)))]!;
+}
+
+/** Tech advance per tick per unit population (population fuels research). */
+export const TECH_RATE = 0.0008;
+/** Population above which research speed saturates. */
+const TECH_POP_SATURATION = 12;
+/** Minimum population for any tech progress. */
+const TECH_MIN_POP = 0.2;
+
 /** Civilization food value by biome (index = Biome value): farmland thrives. */
 const CIV_FOOD: readonly number[] = [
   0, // Barren
@@ -118,5 +141,15 @@ export const civilizationSystem: System = {
       }
     }
     population.set(next);
+
+    // Tech progression: population fuels research, raising ceilings (and, in
+    // M5.3+, pollution). Advance rate scales with population up to saturation.
+    const pop = totalPopulation(state);
+    if (pop > TECH_MIN_POP && state.techLevel < MAX_TECH) {
+      state.techLevel = Math.min(
+        MAX_TECH,
+        state.techLevel + TECH_RATE * dt * Math.min(pop, TECH_POP_SATURATION),
+      );
+    }
   },
 };
