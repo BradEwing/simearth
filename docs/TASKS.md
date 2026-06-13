@@ -45,7 +45,7 @@ Goal: see a procedurally generated planet on screen.
 ## M3 — Atmosphere & climate (the core loop)
 Goal: a planet with a regulating climate.
 
-- [ ] Latitude insolation + base temperature field; temperature map mode.
+- [x] Latitude insolation + base temperature field; temperature map mode.
 - [ ] Greenhouse: CO₂ scalar → temperature forcing; volcanic/respiration sources.
 - [ ] Rising solar luminosity over ticks (stellar evolution).
 - [ ] Carbonate–silicate weathering: temperature-dependent CO₂ drawdown (negative feedback).

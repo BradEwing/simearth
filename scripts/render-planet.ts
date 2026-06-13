@@ -5,7 +5,14 @@ import { deflateSync, crc32 } from 'node:zlib';
 import { createWorldState } from '../src/sim/state';
 import { generateTerrain } from '../src/sim/geosphere/terrain';
 import { classifySurface } from '../src/sim/geosphere/surface';
-import { surfaceMapMode, altitudeMapMode, type MapMode } from '../src/render/mapModes';
+import { Simulation } from '../src/sim/simulation';
+import { temperatureSystem } from '../src/sim/atmosphere/temperature';
+import {
+  surfaceMapMode,
+  altitudeMapMode,
+  temperatureMapMode,
+  type MapMode,
+} from '../src/render/mapModes';
 
 function chunk(type: string, data: Buffer): Buffer {
   const t = Buffer.from(type, 'ascii');
@@ -51,6 +58,7 @@ function encodePNG(w: number, h: number, rgba: Uint8ClampedArray, scale: number)
 const state = createWorldState({ seed: 'simearth', width: 128, height: 64 });
 generateTerrain(state);
 classifySurface(state);
+new Simulation(state, [temperatureSystem]).tick();
 
 const rgba = new Uint8ClampedArray(state.width * state.height * 4);
 const renderMode = (mode: MapMode, file: string): void => {
@@ -61,3 +69,5 @@ const renderMode = (mode: MapMode, file: string): void => {
 
 renderMode(surfaceMapMode, '/tmp/planet-surface.png');
 renderMode(altitudeMapMode, '/tmp/planet-altitude.png');
+renderMode(temperatureMapMode, '/tmp/planet-temperature.png');
+console.log(`mean temperature: ${state.meanTemperature.toFixed(1)} C`);

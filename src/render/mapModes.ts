@@ -94,10 +94,35 @@ function paintAltitude(state: WorldState, rgba: Uint8ClampedArray): void {
   }
 }
 
+// Diverging temperature ramp: cold blue → temperate pale → hot red, over a
+// roughly habitable display range of −40…+40 °C.
+const TEMP_COLD: RGB = [40, 84, 200];
+const TEMP_MILD: RGB = [232, 230, 206];
+const TEMP_HOT: RGB = [206, 60, 42];
+
+/** Colors the map by surface temperature. */
+function paintTemperature(state: WorldState, rgba: Uint8ClampedArray): void {
+  const { temperature } = state;
+  for (let i = 0; i < temperature.length; i++) {
+    const t = Math.min(1, Math.max(0, (temperature[i]! + 40) / 80));
+    const c =
+      t < 0.5
+        ? lerpRGB(TEMP_COLD, TEMP_MILD, t * 2)
+        : lerpRGB(TEMP_MILD, TEMP_HOT, (t - 0.5) * 2);
+    put(rgba, i, c);
+  }
+}
+
 export const surfaceMapMode: MapMode = {
   id: 'surface',
   label: 'Surface',
   paint: paintSurface,
+};
+
+export const temperatureMapMode: MapMode = {
+  id: 'temperature',
+  label: 'Temperature',
+  paint: paintTemperature,
 };
 
 export const altitudeMapMode: MapMode = {
@@ -107,6 +132,10 @@ export const altitudeMapMode: MapMode = {
 };
 
 /** All map modes available so far, in display order. */
-export const MAP_MODES: readonly MapMode[] = [surfaceMapMode, altitudeMapMode];
+export const MAP_MODES: readonly MapMode[] = [
+  surfaceMapMode,
+  altitudeMapMode,
+  temperatureMapMode,
+];
 
 export { SurfaceType };
